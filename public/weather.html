@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Weather - AgroSmart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Mobile Toggle -->
+  <button id="sidebarToggle" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="mainSidebar">
+    <div class="sidebar-header">
+      <a href="home.html">AgroSmart</a>
+    </div>
+    <div class="sidebar-menu">
+      <a href="farmer.html" class="sidebar-link">
+        <span class="icon">🏠</span> <span data-i18n="nav_farmer_hub">Dashboard</span>
+      </a>
+      <a href="farmer.html#addListing" class="sidebar-link">
+        <span class="icon">➕</span> <span data-i18n="add_listing_title">Add Product</span>
+      </a>
+      <a href="farmer.html#farmerProducts" class="sidebar-link">
+        <span class="icon">📦</span> <span data-i18n="f_portal_listings">My Products</span>
+      </a>
+      <a href="farmer.html#farmerOrders" class="sidebar-link">
+        <span class="icon">🛒</span> <span data-i18n="orders_title">Orders</span>
+      </a>
+      <a href="weather.html" class="sidebar-link">
+        <span class="icon">🌤️</span> <span data-i18n="weather_tab">Weather</span>
+      </a>
+      <a href="reservoir.html" class="sidebar-link">
+        <span class="icon">💧</span> <span data-i18n="nav_reservoir">Reservoir Monitoring</span>
+      </a>
+      <a href="news.html" class="sidebar-link">
+        <span class="icon">📰</span> <span data-i18n="nav_news">Farmer News</span>
+      </a>
+      <a href="disease-analysis.html" class="sidebar-link">
+        <span class="icon">🔬</span> <span data-i18n="nav_disease_tool">Disease Prediction</span>
+      </a>
+      <a href="fertilizer-guide.html" class="sidebar-link">
+        <span class="icon">🌿</span> <span data-i18n="nav_fert_guide">Fertilizer Guide</span>
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div id="navUser" class="mb-2 text-center small" style="color: var(--secondary);"></div>
+      <button class="btn btn-sm btn-danger w-100" onclick="logout()" data-i18n="nav_logout">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content p-0">
+    <header class="top-header">
+      <div class="d-flex align-items-center d-lg-none">
+        <button class="btn btn-light border-0 me-3 p-2" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
+        <span class="fw-bold fs-5 text-success">AgroSmart</span>
+      </div>
+      <div class="d-none d-lg-block fw-bold text-dark fs-5">Weather Module</div>
+
+      <div class="header-actions">
+        <a href="cart.html" class="icon-btn text-decoration-none" title="View Cart" style="position:relative;">
+          🛒
+          <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light" style="font-size:0.6rem; display:none;">0</span>
+        </a>
+        <div class="user-profile">
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" id="userAvatar" style="width: 32px; height: 32px; font-weight: bold;">R</div>
+          <span class="d-none d-md-block fw-bold text-dark" id="navUserHeader">User</span>
+        </div>
+      </div>
+    </header>
+
+    <div id="weatherBanner" class="container-fluid py-4 px-md-5 d-none animate-fade">
+      
+      <!-- Current Weather Section -->
+      <div class="row g-4 mb-5">
+        <div class="col-lg-8">
+          <div class="card border-0 shadow-lg weather-card h-100 overflow-hidden position-relative"
+            style="background: linear-gradient(135deg, #0f766e 0%, #134e4a 100%); border-radius: 24px;">
+            <div class="card-body p-5 text-white position-relative" style="z-index: 2;">
+              <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-white bg-opacity-10 border border-white border-opacity-20 px-3 py-2 rounded-pill">
+                      <span class="text-white text-opacity-75 text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 1.5px;">Live Weather</span>
+                    </span>
+                  </div>
+                  <div class="d-flex align-items-baseline gap-2 mb-1">
+                    <h2 id="weatherLocation" class="fw-bold mb-0" style="font-size: 2rem;">Detecting...</h2>
+                    <span class="fs-5 opacity-50">📍</span>
+                  </div>
+                  <small id="weatherDate" class="text-white-50 fw-medium d-block"></small>
+                </div>
+                <div id="weatherIcon" class="display-1" style="font-size: 5rem;">☀️</div>
+              </div>
+              <div class="row align-items-end mb-4 pb-3 border-bottom border-white border-opacity-10">
+                <div class="col-auto">
+                  <h1 id="weatherTemp" class="fw-bold mb-0 lh-1" style="font-size: 5.5rem; text-shadow: 0 4px 20px rgba(0,0,0,0.2);">--°C</h1>
+                </div>
+                <div class="col">
+                  <h4 id="weatherDesc" class="fw-medium mb-2 opacity-90" style="font-size: 1.5rem;">Clear Sky</h4>
+                  <div class="d-flex gap-3 flex-wrap">
+                    <div class="d-flex align-items-center gap-2 bg-white bg-opacity-10 border border-white border-opacity-20 px-3 py-2 rounded-pill">
+                      <span>💧</span><span class="fw-semibold"><span id="weatherHum">0%</span></span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 bg-white bg-opacity-10 border border-white border-opacity-20 px-3 py-2 rounded-pill">
+                      <span>🌧️</span><span class="fw-semibold"><span id="weatherRain">0%</span></span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 bg-white bg-opacity-10 border border-white border-opacity-20 px-3 py-2 rounded-pill">
+                      <span>💨</span><span class="fw-semibold"><span id="weatherWind">0</span> km/h</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-20">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                  <span class="fs-4">🤖</span>
+                  <h6 class="text-white fw-bold text-uppercase mb-0" style="font-size: 0.75rem; letter-spacing: 1.2px;">AI Farming Insight</h6>
+                </div>
+                <p id="cropInsight" class="mb-0 fw-medium lh-base" style="font-size: 1.05rem;">Analyzing environment for your crops...</p>
+              </div>
+            </div>
+            <!-- Decorative Background - Removed to fix overlap -->
+            <div class="d-none">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="d-flex flex-column h-100 gap-4">
+            <div id="disasterAlert" class="alert alert-danger d-none border-0 shadow-lg mb-0 overflow-hidden position-relative rounded-4"
+              style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); min-height: 180px;">
+              <div class="d-flex align-items-center gap-3 p-3 position-relative" style="z-index: 2;">
+                <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 animate-pulse" style="width: 70px; height: 70px;">
+                  <span class="fs-1">🚨</span>
+                </div>
+                <div>
+                  <h5 class="fw-bold mb-2 text-white" id="disasterTitle">WEATHER ALERT!</h5>
+                  <p id="disasterMsg" class="mb-0 text-white opacity-90 small">Severe conditions predicted. Take immediate action.</p>
+                </div>
+              </div>
+            </div>
+            <div class="card border-0 shadow-sm flex-grow-1" style="border-radius: 16px;">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                  <span class="fs-3">🌱</span>
+                  <h5 class="fw-bold text-dark mb-0">Smart Crop Alerts</h5>
+                </div>
+                <div id="cropAlertsContainer" class="d-flex flex-column gap-3">
+                  <div class="p-4 bg-light rounded-4 border border-light text-center">
+                    <div class="spinner-border text-success spinner-border-sm mb-2" role="status"></div>
+                    <div class="text-muted small fw-medium">Fetching latest data...</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Day Forecast Section -->
+      <h3 class="fw-bold text-dark mb-4 mt-5">3-Day Forecast</h3>
+      <div class="row g-4" id="forecastContainer">
+        <!-- 3 cards populated by JS -->
+      </div>
+      
+    </div>
+  </main>
+
+  <div class="footer">© AgroSmart 2025</div>
+
+  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(localStorage.getItem('agroUser') || 'null');
+      if (user) {
+        const header = document.getElementById('navUserHeader');
+        const avatar = document.getElementById('userAvatar');
+        if (header) header.textContent = user.username;
+        if (avatar) avatar.textContent = user.username[0].toUpperCase();
+        const navUser = document.getElementById('navUser');
+        if (navUser) navUser.textContent = '👤 ' + user.username;
+        if (user.role === 'buyer') {
+          const fl = document.getElementById('farmerLink');
+          if (fl) fl.style.display = 'none';
+        }
+      }
+      
+      initWeather(); // Start weather fetching after DOM load
+    });
+  </script>
+</body>
+
+</html>

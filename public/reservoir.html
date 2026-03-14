@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reservoir Monitoring - AgroSmart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .water-level-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+    .water-level-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.8s ease;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Mobile Toggle -->
+  <button id="sidebarToggle" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="mainSidebar">
+    <div class="sidebar-header">
+      <a href="home.html">AgroSmart</a>
+    </div>
+    <div class="sidebar-menu">
+      <a href="farmer.html" class="sidebar-link">
+        <span class="icon">🏠</span> <span data-i18n="nav_farmer_hub">Dashboard</span>
+      </a>
+      <a href="farmer.html#addListing" class="sidebar-link">
+        <span class="icon">➕</span> <span data-i18n="add_listing_title">Add Product</span>
+      </a>
+      <a href="farmer.html#farmerProducts" class="sidebar-link">
+        <span class="icon">📦</span> <span data-i18n="f_portal_listings">My Products</span>
+      </a>
+      <a href="farmer.html#farmerOrders" class="sidebar-link">
+        <span class="icon">🛒</span> <span data-i18n="orders_title">Orders</span>
+      </a>
+      <a href="weather.html" class="sidebar-link">
+        <span class="icon">🌤️</span> <span data-i18n="weather_tab">Weather</span>
+      </a>
+      <a href="reservoir.html" class="sidebar-link">
+        <span class="icon">💧</span> <span data-i18n="nav_reservoir">Reservoir Monitoring</span>
+      </a>
+      <a href="news.html" class="sidebar-link">
+        <span class="icon">📰</span> <span data-i18n="nav_news">Farmer News</span>
+      </a>
+      <a href="disease-analysis.html" class="sidebar-link">
+        <span class="icon">🔬</span> <span data-i18n="nav_disease_tool">Disease Prediction</span>
+      </a>
+      <a href="fertilizer-guide.html" class="sidebar-link">
+        <span class="icon">🌿</span> <span data-i18n="nav_fert_guide">Fertilizer Guide</span>
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div id="navUser" class="mb-2 text-center small" style="color: var(--secondary);"></div>
+      <button class="btn btn-sm btn-danger w-100" onclick="logout()" data-i18n="nav_logout">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content p-0">
+    <header class="top-header">
+      <div class="d-flex align-items-center d-lg-none">
+        <button class="btn btn-light border-0 me-3 p-2" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
+        <span class="fw-bold fs-5 text-success">AgroSmart</span>
+      </div>
+      <div class="d-none d-lg-block fw-bold text-dark fs-5" data-i18n="nav_reservoir">Reservoir Monitoring</div>
+
+      <div class="header-search d-none d-md-flex mx-auto">
+        <span class="text-muted">🔍</span>
+        <input type="text" placeholder="Search Reservoir Data..." />
+      </div>
+
+      <div class="header-actions">
+        <a href="cart.html" class="icon-btn text-decoration-none" title="View Cart" style="position:relative;">
+          🛒
+          <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light" style="font-size:0.6rem; display:none;">0</span>
+        </a>
+        <div class="user-profile">
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" id="userAvatar" style="width: 32px; height: 32px; font-weight: bold;">R</div>
+          <span class="d-none d-md-block fw-bold text-dark" id="navUserHeader">User</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Flood Alert Banner -->
+    <div id="floodAlertBanner" class="alert alert-danger d-none border-0 rounded-0 animate-fade" style="background-color: #EF4444; color: white; margin: 0;">
+      <div class="container-fluid px-md-5 py-3 d-flex align-items-center gap-4">
+        <span class="fs-1">⚠️</span>
+        <div>
+          <h4 class="fw-bold mb-1" style="letter-spacing: -0.5px;">CRITICAL WATER LEVEL WARNING</h4>
+          <p class="mb-0 fw-medium text-white">Reservoir capacity exceeded. Opening main gates now. Move to safety immediately.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid py-4 px-md-5 animate-fade">
+      <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+          <h2 class="fw-bold text-success mb-2">Reservoir Monitoring 💧</h2>
+          <p class="text-muted mb-0">Live water levels and status of major reservoirs in Tamil Nadu.</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">
+            <span class="me-1">🟢</span> Live Data
+          </span>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small text-uppercase">
+              <tr>
+                <th class="ps-4">Reservoir Name</th>
+                <th>District</th>
+                <th>Water Level (ft)</th>
+                <th>Capacity (ft)</th>
+                <th>Depth (m)</th>
+                <th>Inflow (cusecs)</th>
+                <th>Outflow (cusecs)</th>
+                <th>Gate Status</th>
+                <th>Last Updated</th>
+                <th class="pe-4">Status</th>
+              </tr>
+            </thead>
+            <tbody id="reservoirTableBody">
+              <!-- Content loaded via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="footer">© AgroSmart 2025</div>
+
+  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(localStorage.getItem('agroUser') || 'null');
+      if (user) {
+        const header = document.getElementById('navUserHeader');
+        const avatar = document.getElementById('userAvatar');
+        if (header) header.textContent = user.username;
+        if (avatar) avatar.textContent = user.username[0].toUpperCase();
+        const navUser = document.getElementById('navUser');
+        if (navUser) navUser.textContent = '👤 ' + user.username;
+        if (user.role === 'buyer') {
+          const fl = document.getElementById('farmerLink');
+          if (fl) fl.style.display = 'none';
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

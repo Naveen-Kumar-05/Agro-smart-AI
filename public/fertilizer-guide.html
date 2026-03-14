@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fertilizer Guide - AgroSmart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Mobile Toggle -->
+  <button id="sidebarToggle" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
+
+  <!-- Farmer Sidebar -->
+  <aside class="sidebar" id="mainSidebar">
+    <div class="sidebar-header">
+      <a href="home.html">AgroSmart</a>
+    </div>
+    <div class="sidebar-menu">
+      <a href="farmer.html" class="sidebar-link">
+        <span class="icon">🏠</span> <span data-i18n="nav_farmer_hub">Dashboard</span>
+      </a>
+      <a href="farmer.html#addListing" class="sidebar-link">
+        <span class="icon">➕</span> <span data-i18n="add_listing_title">Add Product</span>
+      </a>
+      <a href="farmer.html#farmerProducts" class="sidebar-link">
+        <span class="icon">📦</span> <span data-i18n="f_portal_listings">My Products</span>
+      </a>
+      <a href="farmer.html#farmerOrders" class="sidebar-link">
+        <span class="icon">🛒</span> <span data-i18n="orders_title">Orders</span>
+      </a>
+      <a href="weather.html" class="sidebar-link">
+        <span class="icon">🌤️</span> <span data-i18n="weather_tab">Weather</span>
+      </a>
+      <a href="reservoir.html" class="sidebar-link">
+        <span class="icon">💧</span> <span data-i18n="nav_reservoir">Reservoir Monitoring</span>
+      </a>
+      <a href="news.html" class="sidebar-link">
+        <span class="icon">📰</span> <span data-i18n="nav_news">Farmer News</span>
+      </a>
+      <a href="disease-analysis.html" class="sidebar-link">
+        <span class="icon">🔬</span> <span data-i18n="nav_disease_tool">Disease Prediction</span>
+      </a>
+      <a href="fertilizer-guide.html" class="sidebar-link">
+        <span class="icon">🌿</span> <span data-i18n="nav_fert_guide">Fertilizer Guide</span>
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div id="navUser" class="mb-2 text-center small" style="color: var(--secondary);"></div>
+      <button class="btn btn-sm btn-danger w-100" onclick="logout()" data-i18n="nav_logout">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content p-0">
+    <header class="top-header">
+      <div class="d-flex align-items-center d-lg-none">
+        <button class="btn btn-light border-0 me-3 p-2" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
+        <span class="fw-bold fs-5 text-success">AgroSmart</span>
+      </div>
+      <div class="d-none d-lg-block fw-bold text-dark fs-5" data-i18n="fert_title">Fertilizer Guide</div>
+
+      <div class="header-actions">
+        <div class="user-profile">
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" id="userAvatar" style="width: 32px; height: 32px; font-weight: bold;">F</div>
+          <span class="d-none d-md-block fw-bold text-dark" id="navUserHeader">User</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid py-4 px-md-5 animate-fade">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-success" data-i18n="fert_title">Fertilizer Recommendation 🧪</h2>
+            <p class="text-muted" data-i18n="fert_desc">Enter your crop and soil details for a scientific analysis.</p>
+        </div>
+
+        <div class="card p-4 shadow-sm border-0 mb-5" style="max-width: 800px; margin: 0 auto;">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-muted" data-i18n="fert_crop">CROP TYPE</label>
+                    <select id="cropType" class="form-select">
+                        <option value="Rice" data-i18n="crop_rice">Rice</option>
+                        <option value="Wheat" data-i18n="crop_wheat">Wheat</option>
+                        <option value="Maize" data-i18n="crop_maize">Maize</option>
+                        <option value="Vegetables" data-i18n="crop_vegetables">Vegetables</option>
+                        <option value="Fruits" data-i18n="crop_fruits">Fruits</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-muted" data-i18n="fert_soil">SOIL TYPE</label>
+                    <select id="soilType" class="form-select">
+                        <option value="Alluvial" data-i18n="soil_alluvial">Alluvial</option>
+                        <option value="Black" data-i18n="soil_black">Black</option>
+                        <option value="Red" data-i18n="soil_red">Red</option>
+                        <option value="Sandy" data-i18n="soil_sandy">Sandy</option>
+                        <option value="Clay" data-i18n="soil_clay">Clay</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted" data-i18n="fert_ph">PH LEVEL (1-14)</label>
+                    <input type="number" id="phLevel" class="form-control" step="0.1" value="7.0">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted" data-i18n="fert_water">WATER TYPE</label>
+                    <select id="waterType" class="form-select">
+                        <option value="Fresh" data-i18n="water_fresh">Fresh Water</option>
+                        <option value="Borewell" data-i18n="water_borewell">Borewell</option>
+                        <option value="Canal" data-i18n="water_canal">Canal</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted" data-i18n="fert_age">CROP AGE (DAYS)</label>
+                    <input type="number" id="cropAge" class="form-control" value="30">
+                </div>
+                <div class="col-12 mt-4 text-center">
+                    <button id="analyzeBtn" class="btn btn-success px-5 py-2 fw-bold" data-i18n="fert_btn">Analyze &
+                        Suggest</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultArea" class="d-none" style="max-width: 800px; margin: 0 auto;">
+            <h5 class="fw-bold text-success mb-3" data-i18n="fert_res_title">Analysis Result</h5>
+            <div class="card p-4 bg-light border-0 shadow-sm">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center fs-1">🧪</div>
+                    <div class="col-md-10">
+                        <h4 id="resFertilizer" class="fw-bold text-primary mb-1">...</h4>
+                        <div class="text-muted small mb-3" data-i18n="fert_res_suggested">Suggested Recommendation</div>
+
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="small fw-bold text-muted text-uppercase" data-i18n="fert_res_qty">Quantity</div>
+                                <div id="resQty" class="fw-bold">...</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="small fw-bold text-muted text-uppercase" data-i18n="fert_res_freq">Frequency</div>
+                                <div id="resFreq" class="fw-bold">...</div>
+                            </div>
+                            <div class="col-12 border-top pt-3">
+                                <div class="small fw-bold text-muted text-uppercase mb-2" data-i18n="fert_res_tips">Expert Tips</div>
+                                <p id="resTips" class="mb-0 fst-italic">...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer" data-i18n="footer_text">© AgroSmart 2025</div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('analyzeBtn').addEventListener('click', async () => {
+        const data = {
+            cropType: document.getElementById('cropType').value,
+            soilType: document.getElementById('soilType').value,
+            phLevel: document.getElementById('phLevel').value,
+            waterType: document.getElementById('waterType').value,
+            cropAge: document.getElementById('cropAge').value
+        };
+
+        try {
+            const res = await fetch('/suggest-fertilizer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+
+            if (res.ok) {
+                document.getElementById('resFertilizer').textContent = result.fertilizer;
+                document.getElementById('resQty').textContent = result.quantity;
+                document.getElementById('resFreq').textContent = result.frequency;
+                document.getElementById('resTips').textContent = result.tips;
+                document.getElementById('resultArea').classList.remove('d-none');
+                document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                const lang = localStorage.getItem("agroLang") || "en";
+                alert(result.message || i18n[lang]?.alert_analysis_failed || 'Analysis failed');
+            }
+        } catch (e) {
+            const lang = localStorage.getItem("agroLang") || "en";
+            alert(i18n[lang]?.alert_server_conn || 'Server connection error');
+        }
+    });
+
+    // Update user info in sidebar/header
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(localStorage.getItem('agroUser') || 'null');
+      if (user) {
+        const header = document.getElementById('navUserHeader');
+        const avatar = document.getElementById('userAvatar');
+        if (header) header.textContent = user.username;
+        if (avatar) avatar.textContent = user.username[0].toUpperCase();
+        const navUser = document.getElementById('navUser');
+        if (navUser) navUser.textContent = '👤 ' + user.username;
+      }
+    });
+  </script>
+</body>
+
+</html>

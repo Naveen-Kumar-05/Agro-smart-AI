@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Farmer Portal - AgroSmart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <div id="farmerPageMarker" class="d-none"></div>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100;">
+    <div id="notificationToast" class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert"
+      aria-live="assertive" aria-atomic="true" style="border-radius: 12px;">
+      <div class="d-flex p-2">
+        <div class="toast-body d-flex align-items-center gap-2">
+          <span style="font-size: 1.5rem;">🔔</span>
+          <div>
+            <strong class="d-block" id="toastTitle" data-i18n="alert_new_req">New Alert!</strong>
+            <span id="toastMessage" class="small" data-i18n="alert_have_req">You have a new request.</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+          aria-label="Close"></button>
+      </div>
+      <div class="p-2 border-top border-light border-opacity-10 text-center">
+        <button class="btn btn-sm btn-light w-100 fw-bold" onclick="scrollToAlerts()" data-i18n="btn_view_now">View
+          Now</button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="home.html">AgroSmart</a>
+    </div>
+    <div class="sidebar-menu">
+      <a href="farmer.html" class="sidebar-link">
+        <span class="icon">🏠</span> <span data-i18n="nav_farmer_hub">Dashboard</span>
+      </a>
+      <a href="farmer.html#addListing" class="sidebar-link">
+        <span class="icon">➕</span> <span data-i18n="add_listing_title">Add Product</span>
+      </a>
+      <a href="farmer.html#farmerProducts" class="sidebar-link">
+        <span class="icon">📦</span> <span data-i18n="f_portal_listings">My Products</span>
+      </a>
+      <a href="farmer.html#farmerOrders" class="sidebar-link">
+        <span class="icon">🛒</span> <span data-i18n="orders_title">Orders</span>
+      </a>
+      <a href="weather.html" class="sidebar-link">
+        <span class="icon">🌤️</span> <span data-i18n="weather_tab">Weather</span>
+      </a>
+      <a href="reservoir.html" class="sidebar-link">
+        <span class="icon">💧</span> <span data-i18n="nav_reservoir">Reservoir Monitoring</span>
+      </a>
+      <a href="news.html" class="sidebar-link">
+        <span class="icon">📰</span> <span data-i18n="nav_news">Farmer News</span>
+      </a>
+      <a href="disease-analysis.html" class="sidebar-link">
+        <span class="icon">🔬</span> <span data-i18n="nav_disease_tool">Disease Prediction</span>
+      </a>
+      <a href="fertilizer-guide.html" class="sidebar-link">
+        <span class="icon">🌿</span> <span data-i18n="nav_fert_guide">Fertilizer Guide</span>
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div id="navUser" style="padding: 0.5rem 0; text-align: center; font-size: 0.85rem; margin-bottom: 1rem; color: var(--secondary);"></div>
+      <button id="langToggle" class="btn btn-sm btn-outline-success w-100 mb-2">தமிழ்</button>
+      <button class="btn btn-sm btn-danger w-100" onclick="logout()" data-i18n="nav_logout">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content p-0">
+    <header class="top-header">
+      <div class="d-flex align-items-center d-lg-none">
+        <button class="btn btn-light border-0 me-3 p-2" onclick="document.getElementById('sidebar').classList.toggle('show')">☰</button>
+        <span class="fw-bold fs-5 text-success">AgroSmart</span>
+      </div>
+      <div class="d-none d-lg-block fw-bold text-dark fs-5" data-i18n="nav_farmer_hub">Dashboard</div>
+      
+      <div class="header-search d-none d-md-flex mx-auto">
+        <span class="text-muted">🔍</span>
+        <input type="text" placeholder="Search Listings..." />
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-btn">
+          🔔
+          <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+        </button>
+        <div class="user-profile">
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" id="userAvatar" style="width: 32px; height: 32px; font-weight: bold;">F</div>
+          <span class="d-none d-md-block fw-bold text-dark" id="navUserHeader">Farmer</span>
+        </div>
+      </div>
+    </header>
+    <div class="container-fluid py-4 px-md-5 animate-fade">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+          <h2 class="fw-bold text-dark mb-1" data-i18n="f_portal_title">Farmer Dashboard 🚜</h2>
+          <p class="text-muted mb-0" data-i18n="f_portal_desc">Manage your listings and orders in one place.</p>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <!-- Add Product Quick Card -->
+        <div class="col-lg-4">
+          <div class="d-flex align-items-center mb-3">
+             <span class="fs-4 me-2">🌱</span> 
+             <h5 class="fw-bold text-dark mb-0" id="addListing" data-i18n="add_listing_title">ADD NEW CROP</h5>
+          </div>
+          <div class="card p-4 shadow-sm border-0" style="border-radius: 12px;">
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted" data-i18n="listing_name">CROP NAME</label>
+              <select id="name" class="form-select">
+                <option value="" selected disabled>Select Crop</option>
+                <option value="Rice">Rice</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Maize">Maize</option>
+                <option value="Sugarcane">Sugarcane</option>
+                <option value="Cotton">Cotton</option>
+                <option value="Tomato">Tomato</option>
+                <option value="Potato">Potato</option>
+                <option value="Onion">Onion</option>
+                <option value="Chili">Chili</option>
+                <option value="Cabbage">Cabbage</option>
+                <option value="Carrot">Carrot</option>
+                <option value="Garlic">Garlic</option>
+                <option value="Ginger">Ginger</option>
+                <option value="Brinjal">Brinjal (Eggplant)</option>
+                <option value="Ladies Finger">Ladies Finger (Okra)</option>
+                <option value="Cucumber">Cucumber</option>
+                <option value="Bitter Gourd">Bitter Gourd</option>
+                <option value="Drumstick">Drumstick</option>
+                <option value="Banana">Banana</option>
+                <option value="Papaya">Papaya</option>
+                <option value="Mango">Mango</option>
+                <option value="Grapes">Grapes</option>
+                <option value="Cauliflower">Cauliflower</option>
+                <option value="Groundnut">Groundnut</option>
+                <option value="Millet">Millet</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted" data-i18n="listing_price">PRICE (₹/KG)</label>
+              <input id="price" type="number" class="form-control" placeholder="10" data-i18n="listing_price">
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted" data-i18n="listing_qty">QUANTITY (KG)</label>
+              <input id="qty" type="number" class="form-control" placeholder="50" data-i18n="listing_qty">
+            </div>
+            <div class="mb-4">
+              <label class="form-label small fw-bold text-muted" data-i18n="listing_loc">LOCATION</label>
+              <input id="location" class="form-control bg-light" placeholder="Location loaded automatically" data-i18n="listing_loc" readonly>
+            </div>
+
+            <button id="addBtn" class="btn btn-success fw-bold w-100 py-3" data-i18n="listing_btn">Publish Listing</button>
+            <p id="msg" class="mt-2 small text-center"></p>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div class="row g-4 mb-4">
+            <div class="col-sm-6 col-xl-3">
+              <div class="card p-4 border-0 h-100 shadow-sm">
+                <div class="d-flex align-items-center mb-2">
+                  <div class="bg-success bg-opacity-10 text-success rounded p-2 me-3">
+                    <span class="fs-5">📦</span>
+                  </div>
+                  <h6 class="fw-bold text-muted mb-0 text-uppercase small">Total Products</h6>
+                </div>
+                <h3 class="fw-bold text-dark mb-0 ms-1 mt-2" id="farmerTotalProducts">0</h3>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+              <div class="card p-4 border-0 h-100 shadow-sm">
+                <div class="d-flex align-items-center mb-2">
+                  <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
+                    <span class="fs-5">🛒</span>
+                  </div>
+                  <h6 class="fw-bold text-muted mb-0 text-uppercase small">Orders Received</h6>
+                </div>
+                <h3 class="fw-bold text-dark mb-0 ms-1 mt-2" id="farmerTotalOrders">0</h3>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+              <div class="card p-4 border-0 h-100 shadow-sm">
+                <div class="d-flex align-items-center mb-2">
+                  <div class="bg-warning bg-opacity-10 text-warning rounded p-2 me-3">
+                    <span class="fs-5">⏳</span>
+                  </div>
+                  <h6 class="fw-bold text-muted mb-0 text-uppercase small">Pending Orders</h6>
+                </div>
+                <h3 class="fw-bold text-dark mb-0 ms-1 mt-2" id="farmerPendingOrders">0</h3>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+              <div class="card p-4 border-0 h-100 shadow-sm">
+                <div class="d-flex align-items-center mb-2">
+                  <div class="bg-info bg-opacity-10 text-info rounded p-2 me-3">
+                    <span class="fs-5">📈</span>
+                  </div>
+                  <h6 class="fw-bold text-muted mb-0 text-uppercase small">Recent Sales</h6>
+                </div>
+                <h3 class="fw-bold text-dark mb-0 ms-1 mt-2" id="farmerRecentSales">0</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div class="row g-4 mb-4">
+            <div class="col-xl-8">
+              <div class="card p-4 border-0 shadow-sm h-100">
+                <h6 class="fw-bold text-dark mb-4">Product Sales Trend</h6>
+                <canvas id="salesChart" style="max-height: 300px;"></canvas>
+              </div>
+            </div>
+            <div class="col-xl-4">
+              <div class="card p-4 border-0 shadow-sm h-100">
+                <h6 class="fw-bold text-dark mb-4">Market Share</h6>
+                <canvas id="categoryChart" style="max-height: 300px;"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row g-4 mb-4">
+            <div class="col-12">
+              <div class="card p-4 border-0 shadow-sm h-100">
+                <h6 class="fw-bold text-dark mb-4">Weekly Orders Performance</h6>
+                <canvas id="weeklyOrdersChart" style="max-height: 250px;"></canvas>
+              </div>
+            </div>
+          </div>
+          </div>
+          
+          <div class="d-flex align-items-center gap-2 mb-3">
+             <span class="fs-4">📦</span> 
+             <h5 class="fw-bold text-dark mb-0" id="farmerProducts" data-i18n="f_portal_listings">Your Listings</h5>
+          </div>
+            <div id="productList" class="row g-3 mb-5"></div>
+
+          <div class="d-flex align-items-center gap-2 mb-3 mt-5">
+             <span class="fs-4">🛒</span> 
+             <h5 class="fw-bold text-dark mb-0" id="farmerOrders" data-i18n="orders_title">Incoming Orders</h5>
+          </div>
+          <div id="orderList" class="row g-3 mb-5"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="footer" data-i18n="footer_text">© AgroSmart 2025</div>
+
+  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+[
+  {
+    "username": "praneth",
+    "password": "123",
+    "role": "buyer",
+    "contactNumber": "9876543210",
+    "Location": "Coimbatore"
+  },
+  {
+    "username": "praneth1",
+    "password": "123",
+    "role": "farmer",
+    "contactNumber": "1122334455",
+    "Location": "Coimbatore"
+  },
+  {
+    "username": "testfarmer",
+    "password": "password123",
+    "role": "farmer",
+    "contactNumber": "1234567890",
+    "location": "Ariyalur"
+  },
+  {
+    "username": "testbuyer",
+    "password": "testbuyer",
+    "role": "buyer",
+    "contactNumber": "1234567890",
+    "location": "Ariyalur"
+  },
+  {
+    "username": "testbuyer1",
+    "password": "testbuyer1",
+    "role": "buyer",
+    "contactNumber": "1234567890",
+    "location": "Ariyalur"
+  },
+  {
+    "username": "tester1",
+    "password": "tester1",
+    "role": "buyer",
+    "contactNumber": "1234567890",
+    "location": "Ariyalur"
+  },
+  {
+    "username": "verifybuyer",
+    "password": "verifybuyer",
+    "role": "buyer",
+    "contactNumber": "1234567890",
+    "location": "Ariyalur"
+  },
+  {
+    "username": "buyerx123",
+    "password": "buyerx123",
+    "role": "buyer",
+    "contactNumber": "1234567890",
+    "location": "Ariyalur"
+  },
+  {
+    "username": "farmer_test",
+    "password": "password123",
+    "role": "farmer",
+    "contactNumber": "1234567890",
+    "location": "Ariyalur"
+  },
+  {
+    "username": "test_buyer",
+    "password": "password123",
+    "role": "buyer",
+    "contactNumber": "1234567890",
+    "location": "Ariyalur"
+  },
+  {
+    "username": "test_audit",
+    "password": "12345678",
+    "role": "buyer",
+    "contactNumber": "9876543210",
+    "location": "Ariyalur"
+  },
+  {
+    "username": "farmer_audit",
+    "password": "12345678",
+    "role": "farmer",
+    "contactNumber": "9876543211",
+    "location": "Ariyalur"
+  }
+]

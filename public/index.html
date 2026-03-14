@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AgroSmart Marketplace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div id="marketPageMarker" class="d-none"></div>
+
+  <!-- Mobile Toggle -->
+  <button id="sidebarToggle" onclick="document.getElementById('buyerSidebar').classList.toggle('show')">☰</button>
+
+  <!-- Buyer Sidebar -->
+  <aside class="sidebar" id="buyerSidebar">
+    <div class="sidebar-header">
+      <a href="home.html">AgroSmart</a>
+    </div>
+    <div class="sidebar-menu">
+      <a href="marketplace-home.html" class="sidebar-link">
+        <span class="icon">🏠</span> <span>Marketplace Home</span>
+      </a>
+      <a href="index.html" class="sidebar-link active">
+        <span class="icon">🥬</span> <span data-i18n="nav_market">Marketplace</span>
+      </a>
+      <a href="cart.html" class="sidebar-link">
+        <span class="icon">🛒</span> <span>My Cart <span id="sidebarCartCount" class="badge bg-danger rounded-pill ms-1" style="display:none;">0</span></span>
+      </a>
+      <a href="buyer-orders.html" class="sidebar-link">
+        <span class="icon">📦</span> <span data-i18n="my_orders_title">My Orders</span>
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div id="navUser" class="mb-2 text-center small" style="color: var(--secondary);"></div>
+      <button class="btn btn-sm btn-danger w-100" onclick="logout()" data-i18n="nav_logout">Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content p-0">
+    <header class="top-header">
+      <div class="d-flex align-items-center d-lg-none">
+        <button class="btn btn-light border-0 me-3 p-2" onclick="document.getElementById('buyerSidebar').classList.toggle('show')">☰</button>
+        <span class="fw-bold fs-5 text-success">AgroSmart</span>
+      </div>
+      <div class="d-none d-lg-block fw-bold text-dark fs-5" data-i18n="b_market_title">Marketplace</div>
+
+      <div class="header-search d-none d-md-flex mx-auto">
+        <span class="text-muted">🔍</span>
+        <input type="text" placeholder="Search AgroSmart..." />
+      </div>
+
+      <div class="header-actions">
+        <a href="cart.html" class="icon-btn text-decoration-none" title="View Cart" style="position:relative;">
+          🛒
+          <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light" style="font-size:0.6rem; display:none;">0</span>
+        </a>
+        <div class="user-profile">
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" id="userAvatar" style="width: 32px; height: 32px; font-weight: bold;">B</div>
+          <span class="d-none d-md-block fw-bold text-dark" id="navUserHeader">Buyer</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid py-4 px-md-5 animate-fade">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-success mb-0" data-i18n="b_market_title">Marketplace 🥬</h2>
+        <div class="text-muted small" data-i18n="b_market_realtime">Real-time inventory</div>
+      </div>
+
+      <div class="card p-3 p-md-4 mb-4 border-0 shadow-sm">
+        <div class="row align-items-center g-3">
+          <div class="col-md-7">
+            <label class="form-label fw-bold text-muted small text-uppercase mb-2" data-i18n="b_market_search_label">Search Products</label>
+            <input id="searchBox" class="form-control bg-light" placeholder="Type crop name..." data-i18n="b_market_search_label" onkeyup="searchProducts()">
+          </div>
+          <div class="col-md-5">
+            <label class="form-label fw-bold text-muted small text-uppercase mb-2" data-i18n="b_market_filters">Quick Filters</label>
+            <div id="filterButtons" class="d-flex flex-wrap gap-2">
+              <!-- Buttons dynamically injected here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="products" class="row g-4"></div>
+    </div>
+
+    <div class="footer" data-i18n="footer_text">© AgroSmart 2025</div>
+  </main>
+
+  <!-- Payment Modal -->
+  <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-2">
+        <div id="paymentLoading" class="loading-spinner-overlay d-none">
+          <div class="spinner-border text-success mb-3" role="status"></div>
+          <div class="fw-bold text-success" data-i18n="pay_processing">Processing Payment...</div>
+        </div>
+        <div class="modal-header border-0">
+          <h5 class="modal-title fw-bold" data-i18n="pay_title">Confirm Order & Pay</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+          <div id="paymentOrderSummary" class="mb-4"></div>
+
+          <div class="mb-4">
+            <h6 class="fw-bold mb-3" data-i18n="pay_delivery_title">Delivery Information</h6>
+            <div class="row g-2">
+              <div class="col-md-6 mb-2">
+                <label class="small text-muted fw-bold" data-i18n="pay_name">Full Name</label>
+                <input type="text" id="payBuyerName" class="form-control form-control-sm" data-i18n="pay_name">
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="small text-muted fw-bold" data-i18n="pay_phone">Phone Number</label>
+                <input type="text" id="payBuyerPhone" class="form-control form-control-sm" data-i18n="pay_phone">
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="small text-muted fw-bold">Alternative Phone</label>
+                <input type="text" id="payBuyerAltPhone" class="form-control form-control-sm" placeholder="Optional">
+              </div>
+              <div class="col-12 mb-2">
+                <label class="small text-muted fw-bold" data-i18n="pay_address">Street Address</label>
+                <input type="text" id="payBuyerAddress" class="form-control form-control-sm" data-i18n="pay_address">
+              </div>
+              <div class="col-12">
+                <label class="small text-muted fw-bold" data-i18n="pay_landmark">Delivery Location / Landmark</label>
+                <input type="text" id="payDeliveryLocation" class="form-control form-control-sm" data-i18n="pay_landmark">
+              </div>
+            </div>
+          </div>
+
+          <div class="payment-card shadow">
+            <div class="d-flex justify-content-between mb-4">
+              <span class="small opacity-75 text-uppercase fw-bold" data-i18n="pay_secure_title">Secure Payment</span>
+              <span class="fs-4">💳</span>
+            </div>
+            <div class="mb-3">
+              <label class="small opacity-75 mb-1 d-block" data-i18n="pay_card_no">Card Number</label>
+              <input type="text" id="payCardNumber" class="form-control form-control-sm bg-transparent border-white text-white" placeholder="xxxx xxxx xxxx xxxx">
+            </div>
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="small opacity-75 mb-1 d-block" data-i18n="pay_expiry">Expiry</label>
+                <input type="text" id="payExpiry" class="form-control form-control-sm bg-transparent border-white text-white" placeholder="MM/YY">
+              </div>
+              <div class="col-6">
+                <label class="small opacity-75 mb-1 d-block" data-i18n="pay_cvv">CVV</label>
+                <input type="password" id="payCvv" class="form-control form-control-sm bg-transparent border-white text-white" placeholder="***">
+              </div>
+            </div>
+          </div>
+
+          <div id="paymentError" class="alert alert-danger d-none small mt-3"></div>
+
+          <div class="d-grid mt-3">
+            <button id="payConfirmBtn" class="btn btn-success btn-lg">
+              <span data-i18n="pay_confirm">Confirm & Pay</span> <span id="payAmount"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Sync cart count to sidebar badge
+    document.addEventListener('DOMContentLoaded', function() {
+      const cart = JSON.parse(localStorage.getItem('agroCart') || '[]');
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      if (total > 0) {
+        const sb = document.getElementById('sidebarCartCount');
+        if (sb) { sb.textContent = total; sb.style.display = 'inline'; }
+      }
+      const user = JSON.parse(localStorage.getItem('agroUser') || 'null');
+      if (user) {
+        const header = document.getElementById('navUserHeader');
+        const avatar = document.getElementById('userAvatar');
+        if (header) header.textContent = user.username;
+        if (avatar) avatar.textContent = user.username[0].toUpperCase();
+        const navUser = document.getElementById('navUser');
+        if (navUser) navUser.textContent = '👤 ' + user.username;
+      }
+    });
+  </script>
+</body>
+
+</html>

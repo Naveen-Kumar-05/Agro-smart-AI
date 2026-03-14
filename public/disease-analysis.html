@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Disease Analysis - AgroSmart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .ai-bubble {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border-radius: 20px 20px 20px 0;
+      padding: 1.75rem;
+      border: 1px solid #bbf7d0;
+      position: relative;
+    }
+    .ai-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -12px; left: 0;
+      width: 0; height: 0;
+      border-left: 12px solid #bbf7d0;
+      border-right: 0 solid transparent;
+      border-top: 12px solid transparent;
+    }
+    .result-section {
+      border-left: 3px solid var(--primary);
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .result-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .loading-pulse {
+      display: inline-block;
+      width: 12px; height: 12px;
+      background: var(--primary);
+      border-radius: 50%;
+      margin: 0 3px;
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+    .medicine-badge {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Mobile Toggle -->
+  <button id="sidebarToggle" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="mainSidebar">
+    <div class="sidebar-header">
+      <a href="home.html">AgroSmart</a>
+    </div>
+    <div class="sidebar-menu">
+      <a href="farmer.html" class="sidebar-link">
+        <span class="icon">🏠</span> <span data-i18n="nav_farmer_hub">Dashboard</span>
+      </a>
+      <a href="farmer.html#addListing" class="sidebar-link">
+        <span class="icon">➕</span> <span data-i18n="add_listing_title">Add Product</span>
+      </a>
+      <a href="farmer.html#farmerProducts" class="sidebar-link">
+        <span class="icon">📦</span> <span data-i18n="f_portal_listings">My Products</span>
+      </a>
+      <a href="farmer.html#farmerOrders" class="sidebar-link">
+        <span class="icon">🛒</span> <span data-i18n="orders_title">Orders</span>
+      </a>
+      <a href="weather.html" class="sidebar-link">
+        <span class="icon">🌤️</span> <span data-i18n="weather_tab">Weather</span>
+      </a>
+      <a href="reservoir.html" class="sidebar-link">
+        <span class="icon">💧</span> <span data-i18n="nav_reservoir">Reservoir Monitoring</span>
+      </a>
+      <a href="news.html" class="sidebar-link">
+        <span class="icon">📰</span> <span data-i18n="nav_news">Farmer News</span>
+      </a>
+      <a href="disease-analysis.html" class="sidebar-link">
+        <span class="icon">🔬</span> <span data-i18n="nav_disease_tool">Disease Prediction</span>
+      </a>
+      <a href="fertilizer-guide.html" class="sidebar-link">
+        <span class="icon">🌿</span> <span data-i18n="nav_fert_guide">Fertilizer Guide</span>
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div id="navUser" class="mb-2 text-center small" style="color: var(--secondary);"></div>
+      <button class="btn btn-sm btn-danger w-100" onclick="logout()" data-i18n="nav_logout">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content p-0">
+    <header class="top-header">
+      <div class="d-flex align-items-center d-lg-none">
+        <button class="btn btn-light border-0 me-3 p-2" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
+        <span class="fw-bold fs-5 text-success">AgroSmart</span>
+      </div>
+      <div class="d-none d-lg-block fw-bold text-dark fs-5" data-i18n="nav_disease_tool">AI Disease Prediction</div>
+
+      <div class="header-search d-none d-md-flex mx-auto">
+        <span class="text-muted">🔍</span>
+        <input type="text" placeholder="Search Analysis..." />
+      </div>
+
+      <div class="header-actions">
+        <a href="cart.html" class="icon-btn text-decoration-none" title="View Cart" style="position:relative;">
+          🛒
+          <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light" style="font-size:0.6rem; display:none;">0</span>
+        </a>
+        <div class="user-profile">
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" id="userAvatar" style="width: 32px; height: 32px; font-weight: bold;">A</div>
+          <span class="d-none d-md-block fw-bold text-dark" id="navUserHeader">User</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid py-4 px-md-5 animate-fade">
+      <div class="mb-5">
+        <h2 class="fw-bold text-success mb-1" data-i18n="disease_title">Crop Disease Analysis (AI) 🔬</h2>
+        <p class="text-muted" data-i18n="disease_desc">Describe the symptoms and get an instant AI diagnosis from our agricultural expert.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Input Form -->
+        <div class="col-md-5">
+          <div class="card p-4 shadow-sm border-0">
+            <h5 class="fw-bold mb-4 d-flex align-items-center gap-2" data-i18n="disease_report_title">
+              <span style="background:#dcfce7; padding: 0.5rem; border-radius: 8px;">📋</span>
+              Report Symptoms
+            </h5>
+
+            <div class="mb-3">
+              <label class="form-label" data-i18n="fert_crop">Crop Type</label>
+              <select id="cropType" class="form-select">
+                <option value="Rice" data-i18n="crop_rice">Rice</option>
+                <option value="Wheat" data-i18n="crop_wheat">Wheat</option>
+                <option value="Maize" data-i18n="crop_maize">Maize</option>
+                <option value="Tomato" data-i18n="crop_tomato">Tomato</option>
+                <option value="Cotton" data-i18n="crop_cotton">Cotton</option>
+                <option value="Other" data-i18n="crop_other">Other</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" data-i18n="fert_soil">Soil Type</label>
+              <select id="soilType" class="form-select">
+                <option value="Alluvial" data-i18n="soil_alluvial">Alluvial</option>
+                <option value="Black" data-i18n="soil_black">Black</option>
+                <option value="Sandy" data-i18n="soil_sandy">Sandy</option>
+                <option value="Clay" data-i18n="soil_clay">Clay</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" data-i18n="fert_water">Water Source</label>
+              <select id="waterType" class="form-select">
+                <option value="Fresh" data-i18n="water_fresh">Fresh Water</option>
+                <option value="Borewell" data-i18n="water_borewell">Borewell</option>
+                <option value="Canal" data-i18n="water_canal">Canal</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label" data-i18n="disease_remarks">Symptoms / Remarks</label>
+              <textarea id="remarks" class="form-control" rows="5" data-i18n="disease_placeholder"
+                placeholder="Describe what you observe: leaf color change, spots, wilting, insects, drying..."></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Upload Crop Image (Optional)</label>
+              <input type="file" id="diseaseImage" class="form-control" accept="image/*">
+              <div id="imagePreviewContainer" class="mt-3 text-center d-none border rounded p-2 bg-light">
+                <img id="diseaseImagePreview" src="" alt="Preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+              </div>
+            </div>
+
+            <button id="submitBtn" class="btn btn-success w-100 py-3 fw-bold" data-i18n="disease_btn">
+              🤖 Run AI Analysis
+            </button>
+          </div>
+        </div>
+
+        <!-- Results Area -->
+        <div class="col-md-7">
+          <!-- Placeholder -->
+          <div id="placeholder" class="card p-5 border-0 shadow-sm text-center h-100 d-flex flex-column align-items-center justify-content-center">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.4;">🤖</div>
+            <h5 class="text-muted fw-semibold mb-2">AI Diagnosis Ready</h5>
+            <p class="text-muted small" data-i18n="disease_ai_waiting">Describe your crop's symptoms and click "Run AI Analysis" to get an instant diagnosis.</p>
+          </div>
+
+          <!-- Loading State -->
+          <div id="loading" class="card p-5 border-0 shadow-sm d-none text-center">
+            <div class="mb-4">
+              <div class="loading-pulse"></div>
+              <div class="loading-pulse" style="animation-delay: 0.2s"></div>
+              <div class="loading-pulse" style="animation-delay: 0.4s"></div>
+            </div>
+            <h5 class="text-success fw-bold" data-i18n="disease_analyzing">AI is analyzing your crop...</h5>
+            <p class="text-muted small">This may take a few seconds. The model is processing your symptoms.</p>
+          </div>
+
+          <!-- Results -->
+          <div id="resultArea" class="d-none">
+            <div class="ai-bubble shadow-sm mb-4">
+              <div class="d-flex align-items-center gap-2 mb-4">
+                <span style="font-size: 1.5rem;">🤖</span>
+                <span class="fw-bold text-success" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">AI Diagnosis Result</span>
+              </div>
+
+              <h4 id="resDisease" class="fw-bold text-success mb-4">...</h4>
+
+              <div class="result-section">
+                <div class="result-label" data-i18n="disease_res_reason">Reason for Occurrence</div>
+                <p id="resReason" class="mb-0 text-dark">...</p>
+              </div>
+
+              <div class="result-section">
+                <div class="result-label" data-i18n="disease_res_remedy">Remedy / Solution</div>
+                <p id="resRemedy" class="mb-0 text-dark">...</p>
+              </div>
+
+              <div>
+                <div class="result-label" data-i18n="disease_res_medicine">Recommended Medicine</div>
+                <div class="medicine-badge">
+                  💊 <span id="resMedicine">...</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert border-0 small" style="background: #fefce8; color: #713f12; border-radius: 12px;" data-i18n="disease_disclaimer">
+              <strong>⚠️ Disclaimer:</strong> AI suggestions are based on provided data. For critical issues, please consult a local agricultural officer.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div class="footer">© AgroSmart 2025</div>
+
+  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(localStorage.getItem('agroUser') || 'null');
+      if (user) {
+        const header = document.getElementById('navUserHeader');
+        const avatar = document.getElementById('userAvatar');
+        if (header) header.textContent = user.username;
+        if (avatar) avatar.textContent = user.username[0].toUpperCase();
+        const navUser = document.getElementById('navUser');
+        if (navUser) navUser.textContent = '👤 ' + user.username;
+        if (user.role === 'buyer') {
+          const fl = document.getElementById('farmerLink');
+          if (fl) fl.style.display = 'none';
+        }
+      }
+    });
+
+    let currentImageBase64 = null;
+
+    const imageInput = document.getElementById('diseaseImage');
+    if (imageInput) {
+      imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            currentImageBase64 = event.target.result;
+            document.getElementById('diseaseImagePreview').src = currentImageBase64;
+            document.getElementById('imagePreviewContainer').classList.remove('d-none');
+          };
+          reader.readAsDataURL(file);
+        } else {
+          currentImageBase64 = null;
+          document.getElementById('imagePreviewContainer').classList.add('d-none');
+        }
+      });
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      const data = {
+        cropType: document.getElementById('cropType').value,
+        soilType: document.getElementById('soilType').value,
+        waterType: document.getElementById('waterType').value,
+        remarks: document.getElementById('remarks').value.trim(),
+        imageBase64: currentImageBase64
+      };
+
+      if (!data.remarks) {
+        alert('Please describe the physical symptoms in the remarks field.');
+        return;
+      }
+
+      const placeholder = document.getElementById('placeholder');
+      const loading = document.getElementById('loading');
+      const resultArea = document.getElementById('resultArea');
+
+      placeholder.classList.add('d-none');
+      resultArea.classList.add('d-none');
+      loading.classList.remove('d-none');
+
+      try {
+        const res = await fetch('/analyze-disease', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        loading.classList.add('d-none');
+
+        if (res.ok) {
+          document.getElementById('resDisease').textContent = result.diseaseName;
+          document.getElementById('resReason').textContent = result.reason;
+          document.getElementById('resRemedy').textContent = result.remedy;
+          document.getElementById('resMedicine').textContent = result.medicine;
+          resultArea.classList.remove('d-none');
+        } else {
+          alert(result.message || 'Analysis failed. Please try again.');
+          placeholder.classList.remove('d-none');
+        }
+      } catch (e) {
+        loading.classList.add('d-none');
+        alert('Server connection error. Make sure your local server and Ollama are running.');
+        placeholder.classList.remove('d-none');
+      }
+    });
+  </script>
+</body>
+
+</html>

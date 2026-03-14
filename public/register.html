@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register - AgroSmart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { background: #f0fdf4; }
+    .auth-container {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .auth-brand {
+      background: linear-gradient(160deg, #065f46, #2E7D32, #4CAF50);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-brand::before {
+      content: '';
+      position: absolute;
+      top: -50%; right: -30%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .auth-brand-logo { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px; }
+    .auth-brand-tagline { opacity: 0.75; font-size: 1rem; margin-bottom: 3rem; }
+    .auth-brand-feature {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px; margin-bottom: 0.75rem;
+    }
+    .auth-brand-feature .icon { font-size: 1.4rem; }
+    .auth-brand-feature .text { font-size: 0.9rem; font-weight: 500; }
+    .auth-form-panel {
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; padding: 3rem 2rem; background: white;
+    }
+    .auth-form-inner { width: 100%; max-width: 400px; }
+    .role-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 1rem; border-radius: 50px;
+      font-size: 0.8rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;
+    }
+    @media (max-width: 768px) {
+      .auth-container { grid-template-columns: 1fr; }
+      .auth-brand { display: none; }
+      .auth-form-panel { min-height: 100vh; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="auth-container">
+    <!-- Left Brand Panel -->
+    <div class="auth-brand">
+      <div class="auth-brand-logo">🌾 AgroSmart</div>
+      <div class="auth-brand-tagline">Join thousands of farmers & buyers</div>
+
+      <div class="auth-brand-feature">
+        <span class="icon">🏆</span>
+        <span class="text">Free platform for all registered farmers</span>
+      </div>
+      <div class="auth-brand-feature">
+        <span class="icon">💰</span>
+        <span class="text">Earn more by selling directly to buyers</span>
+      </div>
+      <div class="auth-brand-feature">
+        <span class="icon">🌱</span>
+        <span class="text">AI fertilizer & disease analysis tools</span>
+      </div>
+      <div class="auth-brand-feature">
+        <span class="icon">📱</span>
+        <span class="text">Mobile-friendly dashboard for use in fields</span>
+      </div>
+
+      <div class="mt-4 opacity-50" style="font-size: 0.8rem;">Registration is free and takes less than a minute</div>
+    </div>
+
+    <!-- Right Form Panel -->
+    <div class="auth-form-panel">
+      <div class="auth-form-inner">
+        <a href="home.html" class="d-flex align-items-center gap-2 text-success text-decoration-none fw-bold mb-4" style="font-size: 1.1rem;">
+          ← Back to Home
+        </a>
+
+        <div id="roleBadge" class="role-badge bg-success bg-opacity-10 text-success"></div>
+
+        <h2 class="fw-bold text-dark mb-1" data-i18n="reg_title">Join AgroSmart</h2>
+        <p id="regRoleLabel" class="text-muted mb-4" style="font-size: 0.9rem;"></p>
+
+        <div class="mb-3">
+          <label class="form-label" data-i18n="username_label">Username</label>
+          <input id="regUsername" class="form-control form-control-lg" placeholder="Choose a username" data-i18n="username_label">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" data-i18n="password_label">Password</label>
+          <input id="regPassword" type="password" class="form-control form-control-lg" placeholder="Create a password" data-i18n="password_label">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" data-i18n="contact_label">Contact Number</label>
+          <input id="regContact" class="form-control form-control-lg" placeholder="Your mobile number" data-i18n="contact_label">
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Location (District)</label>
+          <select id="regLocation" class="form-select form-select-lg">
+            <option value="" selected disabled>Select District</option>
+            <option value="Ariyalur">Ariyalur</option>
+            <option value="Chengalpattu">Chengalpattu</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Coimbatore">Coimbatore</option>
+            <option value="Cuddalore">Cuddalore</option>
+            <option value="Dharmapuri">Dharmapuri</option>
+            <option value="Dindigul">Dindigul</option>
+            <option value="Erode">Erode</option>
+            <option value="Kallakurichi">Kallakurichi</option>
+            <option value="Kanchipuram">Kanchipuram</option>
+            <option value="Kanyakumari">Kanyakumari</option>
+            <option value="Karur">Karur</option>
+            <option value="Krishnagiri">Krishnagiri</option>
+            <option value="Madurai">Madurai</option>
+            <option value="Mayiladuthurai">Mayiladuthurai</option>
+            <option value="Nagapattinam">Nagapattinam</option>
+            <option value="Namakkal">Namakkal</option>
+            <option value="Nilgiris">Nilgiris</option>
+            <option value="Perambalur">Perambalur</option>
+            <option value="Pudukkottai">Pudukkottai</option>
+            <option value="Ramanathapuram">Ramanathapuram</option>
+            <option value="Ranipet">Ranipet</option>
+            <option value="Salem">Salem</option>
+            <option value="Sivaganga">Sivaganga</option>
+            <option value="Tenkasi">Tenkasi</option>
+            <option value="Thanjavur">Thanjavur</option>
+            <option value="Theni">Theni</option>
+            <option value="Thoothukudi">Thoothukudi</option>
+            <option value="Tiruchirappalli">Tiruchirappalli</option>
+            <option value="Tirunelveli">Tirunelveli</option>
+            <option value="Tirupathur">Tirupathur</option>
+            <option value="Tiruppur">Tiruppur</option>
+            <option value="Tiruvallur">Tiruvallur</option>
+            <option value="Tiruvannamalai">Tiruvannamalai</option>
+            <option value="Tiruvarur">Tiruvarur</option>
+            <option value="Vellore">Vellore</option>
+            <option value="Viluppuram">Viluppuram</option>
+            <option value="Virudhunagar">Virudhunagar</option>
+          </select>
+        </div>
+
+        <button id="registerBtn" class="btn btn-success fw-bold w-100 py-3 mb-3 btn-lg" data-i18n="create_account">Create Account</button>
+        <p id="regMsg" class="mt-2 text-center small"></p>
+
+        <div class="text-center mt-4 pt-3 border-top">
+          <p class="small mb-0">
+            <span data-i18n="already_account">Already have an account?</span> <a href="login.html" class="text-success fw-bold" data-i18n="signin_btn">Sign In</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role');
+    const badge = document.getElementById('roleBadge');
+    if (role === 'farmer') {
+      badge.innerHTML = '🚜 Farmer Registration';
+      badge.style.display = 'inline-flex';
+    } else if (role === 'buyer') {
+      badge.innerHTML = '🛒 Buyer Registration';
+      badge.style.display = 'inline-flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>
