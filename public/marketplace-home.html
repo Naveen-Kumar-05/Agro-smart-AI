@@ -1,6 +1,5 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,66 +7,30 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
-    .welcome-card {
-      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-      color: white;
-      border: none;
-      border-radius: 20px;
-      overflow: hidden;
-      position: relative;
-    }
-    .welcome-card::after {
-      content: '🥬';
-      position: absolute;
-      right: -20px;
-      bottom: -20px;
-      font-size: 150px;
-      opacity: 0.1;
-      transform: rotate(-15deg);
-    }
-    .stat-card {
-      border: none;
-      border-radius: 15px;
-      transition: transform 0.2s;
-    }
-    .stat-card:hover {
-      transform: translateY(-5px);
-    }
+    .stat-card { border: none; border-radius: var(--radius); transition: var(--transition); }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+    .section-title { font-weight: 800; font-size: 1.2rem; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
   </style>
 </head>
-
 <body>
   <div id="marketHomePageMarker" class="d-none"></div>
 
-  <!-- Mobile Toggle -->
   <button id="sidebarToggle" onclick="document.getElementById('buyerSidebar').classList.toggle('show')">☰</button>
 
-  <!-- Buyer Sidebar -->
   <aside class="sidebar" id="buyerSidebar">
-    <div class="sidebar-header">
-      <a href="home.html">AgroSmart</a>
-    </div>
+    <div class="sidebar-header"><a href="home.html">AgroSmart</a></div>
     <div class="sidebar-menu">
-      <a href="marketplace-home.html" class="sidebar-link active">
-        <span class="icon">🏠</span> <span>Marketplace Home</span>
-      </a>
-      <a href="index.html" class="sidebar-link">
-        <span class="icon">🥬</span> <span>Browse Market</span>
-      </a>
-      <a href="cart.html" class="sidebar-link">
-        <span class="icon">🛒</span> <span>My Cart <span id="sidebarCartCount" class="badge bg-danger rounded-pill ms-1" style="display:none;">0</span></span>
-      </a>
-      <a href="buyer-orders.html" class="sidebar-link">
-        <span class="icon">📦</span> <span>My Orders</span>
-      </a>
+      <a href="marketplace-home.html" class="sidebar-link active"><span class="icon">🏠</span><span>Dashboard</span></a>
+      <a href="index.html" class="sidebar-link"><span class="icon">🥬</span><span>Browse Market</span></a>
+      <a href="cart.html" class="sidebar-link"><span class="icon">🛒</span><span>My Cart <span id="sidebarCartCount" class="badge bg-danger rounded-pill ms-1" style="display:none;">0</span></span></a>
+      <a href="buyer-orders.html" class="sidebar-link"><span class="icon">📦</span><span>My Orders</span></a>
     </div>
     <div class="sidebar-footer">
-      <div id="navUser" class="mb-2 text-center small" style="color: var(--secondary);"></div>
+      <div id="navUser" class="mb-2 text-center small"></div>
       <button class="btn btn-sm btn-danger w-100" onclick="logout()">Logout</button>
     </div>
   </aside>
 
-  <!-- Main Content -->
   <main class="main-content p-0">
     <header class="top-header">
       <div class="d-flex align-items-center d-lg-none">
@@ -75,14 +38,13 @@
         <span class="fw-bold fs-5 text-success">AgroSmart</span>
       </div>
       <div class="d-none d-lg-block fw-bold text-dark fs-5">Buyer Dashboard</div>
-
       <div class="header-actions">
         <a href="cart.html" class="icon-btn text-decoration-none" title="View Cart" style="position:relative;">
           🛒
           <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light" style="font-size:0.6rem; display:none;">0</span>
         </a>
         <div class="user-profile">
-          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" id="userAvatar" style="width: 32px; height: 32px; font-weight: bold;">B</div>
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" id="userAvatar" style="width:34px;height:34px;">B</div>
           <span class="d-none d-md-block fw-bold text-dark" id="navUserHeader">Buyer</span>
         </div>
       </div>
@@ -90,12 +52,13 @@
 
     <div class="container-fluid py-4 px-md-5 animate-fade">
       <!-- Welcome Banner -->
-      <div class="card welcome-card p-4 p-md-5 mb-4 shadow-sm">
+      <div class="card welcome-card p-4 p-md-5 mb-4">
         <div class="row align-items-center">
           <div class="col-md-8">
+            <div class="district-badge mb-2" id="userDistrictBadge" style="display:none;">📍 <span id="userDistrictLabel"></span></div>
             <h1 class="fw-bold mb-2">Welcome back, <span id="welcomeName">Buyer</span>! 👋</h1>
             <p class="lead mb-4 opacity-90">Find the freshest crops from local farmers at AI-powered fair prices.</p>
-            <div class="d-flex gap-3">
+            <div class="d-flex gap-3 flex-wrap">
               <a href="index.html" class="btn btn-light text-success fw-bold px-4 py-2 rounded-pill">Shop Now</a>
               <a href="buyer-orders.html" class="btn btn-outline-light fw-bold px-4 py-2 rounded-pill">View Orders</a>
             </div>
@@ -104,52 +67,52 @@
       </div>
 
       <!-- Stats Row -->
-      <div class="row g-4 mb-4">
+      <div class="row g-4 mb-5">
         <div class="col-md-4">
-          <div class="card stat-card p-4 bg-white shadow-sm border-start border-success border-5">
+          <div class="card stat-card p-4 bg-white shadow-sm" style="border-left: 4px solid var(--primary);">
             <div class="text-muted small fw-bold text-uppercase mb-1">Total Orders</div>
-            <div class="h2 fw-bold mb-0" id="totalOrdersCount">0</div>
+            <div class="h2 fw-bold mb-0 text-dark" id="totalOrdersCount">0</div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card stat-card p-4 bg-white shadow-sm border-start border-primary border-5">
+          <div class="card stat-card p-4 bg-white shadow-sm" style="border-left: 4px solid #3b82f6;">
             <div class="text-muted small fw-bold text-uppercase mb-1">Items in Cart</div>
-            <div class="h2 fw-bold mb-0" id="cartItemsCount">0</div>
+            <div class="h2 fw-bold mb-0 text-dark" id="cartItemsCount">0</div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card stat-card p-4 bg-white shadow-sm border-start border-warning border-5">
-            <div class="text-muted small fw-bold text-uppercase mb-1">Savings this month</div>
-            <div class="h2 fw-bold mb-0 text-success">₹420</div>
+          <div class="card stat-card p-4 bg-white shadow-sm" style="border-left: 4px solid var(--accent);">
+            <div class="text-muted small fw-bold text-uppercase mb-1">Your District</div>
+            <div class="h5 fw-bold mb-0 text-dark" id="userDistrictStat">—</div>
           </div>
         </div>
       </div>
 
       <!-- Recommendations Section -->
-      <div class="mb-4">
+      <div class="mb-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <h3 class="fw-bold text-dark mb-0">Recommended for You 🌟</h3>
-          <a href="index.html" class="text-success text-decoration-none fw-bold">View All</a>
+          <div class="section-title">🌟 Recommended for You <span id="recDistrictLabel" class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fw-normal" style="font-size:0.75rem;"></span></div>
+          <a href="index.html" class="text-success text-decoration-none fw-bold small">View All →</a>
         </div>
         <div id="recommendationsList" class="row g-4">
-          <!-- Recommendations dynamic -->
-          <div class="text-center py-5 text-muted">
+          <div class="col-12 text-center py-5">
             <div class="spinner-border text-success" role="status"></div>
-            <p class="mt-2 text-dark">Finding best crops in your area...</p>
+            <p class="mt-2 text-muted small">Finding best crops in your area...</p>
           </div>
         </div>
       </div>
 
       <!-- Recently Added -->
-      <div>
-        <h3 class="fw-bold text-dark mb-4">Freshly Listed 🥬</h3>
-        <div id="newestProducts" class="row g-4">
-          <!-- Newest dynamic -->
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="section-title">🥬 Freshly Listed</div>
+          <a href="index.html" class="text-success text-decoration-none fw-bold small">See All →</a>
         </div>
+        <div id="newestProducts" class="row g-4"></div>
       </div>
     </div>
 
-    <div class="footer">© AgroSmart 2025</div>
+    <div class="footer">© AgroSmart 2025 · Built for Tamil Nadu Farmers</div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -161,17 +124,27 @@
         window.location.href = 'login.html?role=buyer';
         return;
       }
-      
-      // Update UI
+
       document.getElementById('welcomeName').textContent = user.username;
       document.getElementById('navUserHeader').textContent = user.username;
       document.getElementById('userAvatar').textContent = user.username[0].toUpperCase();
       document.getElementById('navUser').textContent = '👤 ' + user.username;
-      
+
+      // Show district info
+      if (user.location) {
+        const distBadge = document.getElementById('userDistrictBadge');
+        const distLabel = document.getElementById('userDistrictLabel');
+        const distStat  = document.getElementById('userDistrictStat');
+        const recLabel  = document.getElementById('recDistrictLabel');
+        if (distBadge) { distBadge.style.display = 'inline-flex'; }
+        if (distLabel) distLabel.textContent = user.location;
+        if (distStat)  distStat.textContent = user.location;
+        if (recLabel)  recLabel.textContent = 'Near ' + user.location;
+      }
+
       const cart = JSON.parse(localStorage.getItem('agroCart') || '[]');
       const totalInCart = cart.reduce((s, i) => s + i.quantity, 0);
       document.getElementById('cartItemsCount').textContent = totalInCart;
-      
       if (totalInCart > 0) {
         document.getElementById('cartBadge').textContent = totalInCart;
         document.getElementById('cartBadge').style.display = 'block';
@@ -179,20 +152,15 @@
         if (sb) { sb.textContent = totalInCart; sb.style.display = 'inline'; }
       }
 
-      // Fetch buyer orders count
       try {
         const res = await fetch('/orders');
         const orders = await res.json();
-        const myOrders = orders.filter(o => o.buyerName === user.username);
-        document.getElementById('totalOrdersCount').textContent = myOrders.length;
+        document.getElementById('totalOrdersCount').textContent = orders.filter(o => o.buyerName === user.username).length;
       } catch (e) { console.error(e); }
 
-      // Initialize recommendations
-      if (typeof renderRecommendations === 'function') {
-        renderRecommendations();
-      }
+      // Load recommendations (fetches products internally)
+      await renderRecommendations();
     });
   </script>
 </body>
-
 </html>

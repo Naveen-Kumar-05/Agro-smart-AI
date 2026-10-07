@@ -1,128 +1,114 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Farmer News & Schemes - AgroSmart</title>
+  <title>Farmer News - AgroSmart</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .news-hero{background:linear-gradient(135deg,#fff8e1,#ffecb3);border-radius:var(--radius-lg);padding:2rem 2.5rem;margin-bottom:2rem;position:relative;overflow:hidden;}
+    .news-hero::after{content:"NEWS";position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-size:4rem;opacity:.06;font-weight:900;letter-spacing:-2px;}
+    .news-card{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:white;transition:var(--transition);height:100%;}
+    .news-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:rgba(26,122,46,.15);}
+    .news-card img{height:180px;object-fit:cover;width:100%;}
+    .cat-btn{border-radius:50px;padding:.45rem 1.1rem;font-size:.85rem;font-weight:600;border:1.5px solid var(--border);background:white;color:var(--text-muted);cursor:pointer;transition:var(--transition);}
+    .cat-btn:hover,.cat-btn.active{background:var(--primary);color:white;border-color:var(--primary);}
+    .news-loading{text-align:center;padding:3rem;color:var(--text-muted);}
+  </style>
 </head>
-
 <body>
-
-  <!-- Mobile Toggle -->
-  <button id="sidebarToggle" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
-
-  <!-- Sidebar (shared for farmer / buyer) -->
+  <button id="sidebarToggle" onclick="document.getElementById('mainSidebar').classList.toggle('show')">&#9776;</button>
   <aside class="sidebar" id="mainSidebar">
-    <div class="sidebar-header">
-      <a href="home.html">AgroSmart</a>
-    </div>
+    <div class="sidebar-header"><a href="home.html">AgroSmart</a></div>
     <div class="sidebar-menu">
-      <a href="farmer.html" class="sidebar-link">
-        <span class="icon">🏠</span> <span data-i18n="nav_farmer_hub">Dashboard</span>
-      </a>
-      <a href="farmer.html#addListing" class="sidebar-link">
-        <span class="icon">➕</span> <span data-i18n="add_listing_title">Add Product</span>
-      </a>
-      <a href="farmer.html#farmerProducts" class="sidebar-link">
-        <span class="icon">📦</span> <span data-i18n="f_portal_listings">My Products</span>
-      </a>
-      <a href="farmer.html#farmerOrders" class="sidebar-link">
-        <span class="icon">🛒</span> <span data-i18n="orders_title">Orders</span>
-      </a>
-      <a href="weather.html" class="sidebar-link">
-        <span class="icon">🌤️</span> <span data-i18n="weather_tab">Weather</span>
-      </a>
-      <a href="reservoir.html" class="sidebar-link">
-        <span class="icon">💧</span> <span data-i18n="nav_reservoir">Reservoir Monitoring</span>
-      </a>
-      <a href="news.html" class="sidebar-link">
-        <span class="icon">📰</span> <span data-i18n="nav_news">Farmer News</span>
-      </a>
-      <a href="disease-analysis.html" class="sidebar-link">
-        <span class="icon">🔬</span> <span data-i18n="nav_disease_tool">Disease Prediction</span>
-      </a>
-      <a href="fertilizer-guide.html" class="sidebar-link">
-        <span class="icon">🌿</span> <span data-i18n="nav_fert_guide">Fertilizer Guide</span>
-      </a>
+      <div class="sidebar-section-label">Main</div>
+      <a href="farmer.html" class="sidebar-link"><span class="icon">&#127968;</span><span>Dashboard</span></a>
+      <a href="farmer.html#addListing" class="sidebar-link"><span class="icon">&#10133;</span><span>Add Product</span></a>
+      <a href="farmer.html#farmerProducts" class="sidebar-link"><span class="icon">&#128230;</span><span>My Products</span></a>
+      <a href="farmer.html#farmerOrdersAnchor" class="sidebar-link"><span class="icon">&#128722;</span><span>Orders</span></a>
+      <div class="sidebar-section-label">Tools</div>
+      <a href="weather.html" class="sidebar-link"><span class="icon">&#127780;&#65039;</span><span>Weather</span></a>
+      <a href="reservoir.html" class="sidebar-link"><span class="icon">&#128167;</span><span>Reservoir Monitor</span></a>
+      <a href="news.html" class="sidebar-link active"><span class="icon">&#128240;</span><span>Farmer News</span></a>
+      <a href="disease-analysis.html" class="sidebar-link"><span class="icon">&#128300;</span><span>Disease Analysis</span></a>
+      <a href="fertilizer-guide.html" class="sidebar-link"><span class="icon">&#127807;</span><span>Fertilizer Guide</span></a>
     </div>
     <div class="sidebar-footer">
-      <div id="navUser" class="mb-2 text-center small" style="color: var(--secondary);"></div>
-      <button class="btn btn-sm btn-danger w-100" onclick="logout()" data-i18n="nav_logout">Logout</button>
+      <div id="navUser" class="mb-2"></div>
+      <button class="btn btn-sm btn-danger w-100" onclick="logout()">Logout</button>
     </div>
   </aside>
 
   <main class="main-content p-0">
     <header class="top-header">
       <div class="d-flex align-items-center d-lg-none">
-        <button class="btn btn-light border-0 me-3 p-2" onclick="document.getElementById('mainSidebar').classList.toggle('show')">☰</button>
+        <button class="btn btn-light border-0 me-3 p-2" onclick="document.getElementById('mainSidebar').classList.toggle('show')">&#9776;</button>
         <span class="fw-bold fs-5 text-success">AgroSmart</span>
       </div>
-      <div class="d-none d-lg-block fw-bold text-dark fs-5" data-i18n="nav_news">Farmer News</div>
-
-      <div class="header-search d-none d-md-flex mx-auto">
-        <span class="text-muted">🔍</span>
-        <input type="text" placeholder="Search News & Schemes..." />
-      </div>
-
+      <div class="d-none d-lg-block fw-bold text-dark fs-5">Farmer News</div>
       <div class="header-actions">
-        <a href="cart.html" class="icon-btn text-decoration-none" title="View Cart" style="position:relative;">
-          🛒
-          <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light" style="font-size:0.6rem; display:none;">0</span>
-        </a>
         <div class="user-profile">
-          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" id="userAvatar" style="width: 32px; height: 32px; font-weight: bold;">N</div>
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" id="userAvatar" style="width:34px;height:34px;">N</div>
           <span class="d-none d-md-block fw-bold text-dark" id="navUserHeader">User</span>
         </div>
       </div>
     </header>
 
     <div class="container-fluid py-4 px-md-5 animate-fade">
-      <div class="row mb-5 align-items-center">
-        <div class="col-md-8">
-          <h2 class="fw-bold text-success mb-2">Farmer News & Schemes 📰</h2>
-          <p class="text-muted">Latest updates on government schemes and agriculture news.</p>
-        </div>
-        <div class="col-md-4 text-md-end">
-          <select id="newsCategory" class="form-select border-0 shadow-sm py-2 px-3" style="border-radius: 12px;" onchange="loadNews()">
-            <option value="All">All Categories</option>
-            <option value="TN Schemes">Tamil Nadu Schemes</option>
-            <option value="Central Schemes">Central Schemes</option>
-            <option value="Agriculture News">Agriculture News</option>
-          </select>
+      <div class="news-hero">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <h2 class="fw-bold text-dark mb-1">Farmer News &amp; Schemes</h2>
+            <p class="text-muted mb-0">Latest government schemes, subsidies, and agriculture updates for Tamil Nadu</p>
+          </div>
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="cat-btn active" onclick="filterNews('All',this)">All</button>
+            <button class="cat-btn" onclick="filterNews('TN Schemes',this)">TN Schemes</button>
+            <button class="cat-btn" onclick="filterNews('Central Schemes',this)">Central Schemes</button>
+            <button class="cat-btn" onclick="filterNews('Agriculture News',this)">Agriculture</button>
+          </div>
         </div>
       </div>
+
+      <select id="newsCategory" class="d-none" onchange="loadNews()">
+        <option value="All">All</option>
+        <option value="TN Schemes">TN Schemes</option>
+        <option value="Central Schemes">Central Schemes</option>
+        <option value="Agriculture News">Agriculture News</option>
+      </select>
 
       <div id="newsContainer" class="row g-4">
-        <!-- Content loaded via app.js -->
+        <div class="col-12 news-loading">
+          <div class="spinner-border text-success mb-3" role="status"></div>
+          <p>Loading news...</p>
+        </div>
       </div>
     </div>
-  </main>
 
-  <div class="footer">© AgroSmart 2025</div>
+    <div class="footer">&#169; AgroSmart 2025 &#183; Built for Tamil Nadu Farmers</div>
+  </main>
 
   <script src="app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    function filterNews(cat, btn) {
+      document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('newsCategory').value = cat;
+      loadNews();
+    }
     document.addEventListener('DOMContentLoaded', function() {
-      const user = JSON.parse(localStorage.getItem('agroUser') || 'null');
+      var user = JSON.parse(localStorage.getItem('agroUser') || 'null');
       if (user) {
-        const header = document.getElementById('navUserHeader');
-        const avatar = document.getElementById('userAvatar');
-        if (header) header.textContent = user.username;
-        if (avatar) avatar.textContent = user.username[0].toUpperCase();
-        const navUser = document.getElementById('navUser');
-        if (navUser) navUser.textContent = '👤 ' + user.username;
-        // Hide farmer portal link for buyers
-        if (user.role === 'buyer') {
-          const fl = document.getElementById('farmerLink');
-          if (fl) fl.style.display = 'none';
-        }
+        var h = document.getElementById('navUserHeader');
+        var a = document.getElementById('userAvatar');
+        var n = document.getElementById('navUser');
+        if (h) h.textContent = user.username;
+        if (a) a.textContent = user.username[0].toUpperCase();
+        if (n) n.textContent = 'User: ' + user.username;
       }
     });
   </script>
 </body>
-
 </html>

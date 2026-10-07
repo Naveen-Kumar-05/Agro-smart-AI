@@ -1,4 +1,4 @@
-// Prevent logged-in users from seeing login page again
+﻿// Prevent logged-in users from seeing login page again
 // BUT respect the ?role= parameter — if a farmer visits login.html?role=buyer,
 // they need to log in as a buyer separately, so don't redirect.
 if (window.location.pathname.includes("login.html")) {
@@ -8,9 +8,9 @@ if (window.location.pathname.includes("login.html")) {
     // Only auto-redirect if no specific role is requested, or the requested role matches
     if (!urlRole || urlRole === user.role) {
       if (user.role === "farmer") {
-        window.location.href = "farmer.html";
+        navigateTo("farmer.html");
       } else {
-        window.location.href = "index.html";
+        navigateTo("index.html");
       }
     }
   }
@@ -29,25 +29,15 @@ function getQueryParam(name) {
 }
 
 function getCropEmoji(name) {
-  const cropEmojis = {
-    "rice": "🌾",
-    "wheat": "🌾",
-    "maize": "🌽",
-    "corn": "🌽",
-    "sugarcane": "🎋",
-    "cotton": "☁️",
-    "tomato": "🍅",
-    "potato": "🥔",
-    "onion": "🧅",
-    "chili": "🌶️",
-    "groundnut": "🥜",
-    "millet": "🌾",
-    "banana": "🍌",
-    "mango": "🥭",
-    "fruits": "🍎",
-    "vegetables": "🥗"
+  const map = {
+    rice:"🌾", wheat:"🌾", maize:"🌽", corn:"🌽", sugarcane:"🎋",
+    cotton:"🌿", tomato:"🍅", potato:"🥔", onion:"🧅", chili:"🌶",
+    groundnut:"🥜", millet:"🌾", banana:"🍌", mango:"🥭",
+    fruits:"🍎", vegetables:"🥗", carrot:"🥕", cabbage:"🥬",
+    garlic:"🧄", ginger:"🌿", brinjal:"🍆", cucumber:"🥒",
+    papaya:"🍈", grapes:"🍇", cauliflower:"🥦", drumstick:"🌿"
   };
-  return cropEmojis[name.toLowerCase()] || "📦";
+  return map[(name||"").toLowerCase()] || "📦";
 }
 
 /* ---------- USER / SESSION HELPERS ---------- */
@@ -83,7 +73,14 @@ function setCurrentUser(user) {
 
 function logout() {
   localStorage.removeItem("agroUser");
-  window.location.href = "home.html";
+  navigateTo("home.html");
+}
+
+function navigateTo(url) {
+  document.body.style.opacity = "0";
+  document.body.style.transform = "translateY(-8px)";
+  document.body.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+  setTimeout(() => { window.location.href = url; }, 250);
 }
 
 /* ---------- TRANSLATION DICTIONARY ---------- */
@@ -92,8 +89,8 @@ const i18n = {
     nav_home: "Home",
     nav_farmer_hub: "Farmer Hub",
     nav_market: "Marketplace",
-    nav_fert_guide: "Fertilizer Guide 🧪",
-    nav_disease_tool: "Disease Analysis 💊",
+    nav_fert_guide: "Fertilizer Guide",
+    nav_disease_tool: "Disease Analysis",
     nav_login: "Login",
     nav_logout: "Logout",
     hero_title: "The Future of <span class='text-primary-light'>Farming</span> is Here 🌾",
@@ -115,7 +112,7 @@ const i18n = {
     listing_loc: "LOCATION",
     listing_btn: "Add Product",
     orders_title: "Incoming Orders",
-    fert_title: "Fertilizer Recommendation 🧪",
+    fert_title: "Fertilizer Recommendation",
     fert_desc: "Get scientific suggestions for your crops.",
     fert_crop: "CROP TYPE",
     fert_soil: "SOIL TYPE",
@@ -123,7 +120,7 @@ const i18n = {
     fert_water: "WATER TYPE",
     fert_age: "CROP AGE (DAYS)",
     fert_btn: "Analyze & Suggest",
-    disease_title: "Crop Disease Analysis (AI) 💊",
+    disease_title: "Crop Disease Analysis (AI)",
     disease_desc: "Explain symptoms for instant AI diagnosis.",
     disease_remarks: "REMARKS / SYMPTOMS",
     disease_btn: "Run AI Analysis",
@@ -150,7 +147,7 @@ const i18n = {
     hero_card_feat1: "AI Price Suggestions",
     hero_card_feat2: "Direct Ordering",
     hero_card_feat3: "Real-time Trackers",
-    f_portal_dashboard: "Farmer Dashboard 🚜",
+    f_portal_dashboard: "Farmer Dashboard",
     f_portal_manage: "Manage your listings and orders in one place.",
     f_portal_add_btn: "Publish Listing",
     f_portal_listings: "Your Listings",
@@ -265,8 +262,8 @@ const i18n = {
     weather_denied: "Location access denied",
     weather_unavail: "Wait, weather unavailable",
     weather_geo_unavail: "Geolocation not supported",
-    alert_storm_now: "STORM NOW! ⚡",
-    alert_heavy_rain: "Heavy Rain Coming 🌧️",
+    alert_storm_now: "STORM NOW!",
+    alert_heavy_rain: "Heavy Rain Coming",
     alert_raining: "Raining",
     disaster_storm: "Severe Storm predicted tomorrow! Please secure all outdoor equipment and livestock.",
     disaster_rain: "Extreme rainfall expected tomorrow. Potential for flooding in low-lying fields.",
@@ -289,254 +286,18 @@ const i18n = {
     msg_cart_added: "Item added to cart",
     msg_cart_updated: "Quantity updated in cart"
   },
-  ta: {
-    nav_home: "முகப்பு",
-    nav_farmer_hub: "விவசாயி மையம்",
-    nav_market: "சந்தை",
-    nav_fert_guide: "உர வழிகாட்டி 🧪",
-    nav_disease_tool: "நோய் பகுப்பாய்வு 💊",
-    nav_login: "உள்நுழை",
-    nav_logout: "வெளியேறு",
-    hero_title: "விவசாயத்தின் <span class='text-primary-light'>எதிர்காலம்</span> இதோ 🌾",
-    hero_subtitle: "உள்ளூர் விவசாயிகளை நேரடியாக வாங்குபவர்களுடன் இணைக்கும் ஸ்மார்ட் தளம்.",
-    hero_market_btn: "சந்தையை பார்க்க",
-    hero_farmer_btn: "விவசாயியாக சேர",
-    f_portal_title: "விவசாயி பலகை",
-    f_portal_desc: "பயிர் பட்டியல்களைச் சேர்க்கவும், கையிருப்பை நிர்வகிக்கவும் மற்றும் வரும் ஆர்டர்களைப் பார்க்கவும்.",
-    b_market_title: "வாங்குபவர் சந்தை",
-    b_market_desc: "புதிய தயாரிப்புகளை உலாவவும் மற்றும் நேரடியாக ஆர்டர்களைச் செய்யவும்.",
-    weather_loading: "வானிலை ஏற்றப்படுகிறது...",
-    weather_location: "இடத்தைக் கண்டறிகிறது...",
-    forecast_title: "3-நாள் முன்னறிவிப்பு",
-    disaster_title: "வானிலை பேரழிவு எச்சரிக்கை!",
-    add_listing_title: "புதிய பட்டியலைச் சேர்க்கவும்",
-    listing_name: "தயாரிப்பு பெயர்",
-    listing_price: "விலை (₹/கிலோ)",
-    listing_qty: "அளவு (கிலோ)",
-    listing_loc: "இடம்",
-    listing_btn: "தயாரிப்பைச் சேர்",
-    orders_title: "ஆர்டர்கள்",
-    fert_title: "உர பரிந்துரை 🧪",
-    fert_desc: "உங்கள் பயிர்களுக்கு அறிவியல் பூர்வமான பரிந்துரைகளைப் பெறுங்கள்.",
-    fert_crop: "பயிர் வகை",
-    fert_soil: "மண் வகை",
-    fert_ph: "பி.எச் (pH) அளவு",
-    fert_water: "நீர் வகை",
-    fert_age: "பயிர் வயது (நாட்கள்)",
-    fert_btn: "ஆய்வு செய்து பரிந்துரைக்கவும்",
-    disease_title: "பயிர் நோய் பகுப்பாய்வு (AI) 💊",
-    disease_desc: "AI நோயறிதலுக்கு அறிகுறிகளை விளக்கவும்.",
-    disease_remarks: "குறிப்புகள் / அறிகுறிகள்",
-    disease_btn: "AI பகுப்பாய்வை இயக்கவும்",
-    pay_title: "பாதுகாப்பான கட்டணம் & விநியோகம்",
-    pay_name: "முழு பெயர்",
-    pay_phone: "தொலைபேசி எண்",
-    pay_address: "தெரு முகவரி",
-    pay_landmark: "டெலிவரி இடம் / அடையாளம்",
-    pay_confirm: "உறுதி செய்து பணம் செலுத்தவும்",
-    msg_cart_added: "பொருள் கூடையில் சேர்க்கப்பட்டது",
-    msg_cart_updated: "கூடையில் அளவு புதுப்பிக்கப்பட்டது",
-    login_title: "மீண்டும் வருக",
-    username_label: "பயனர் பெயர்",
-    password_label: "கடவுச்சொல்",
-    signin_btn: "உள்நுழை",
-    new_farmer: "புதிய விவசாயியா?",
-    new_customer: "புதிய வாடிக்கையாளரா?",
-    create_account: "கணக்கை உருவாக்கவும்",
-    my_orders_title: "உங்கள் ஆர்டர்கள்",
-    reg_title: "அக்ரோஸ்மார்ட்டில் இணையுங்கள்",
-    contact_label: "தொடர்பு எண்",
-    already_account: "ஏற்கனவே கணக்கு உள்ளதா?",
-    footer_text: "© அக்ரோஸ்மார்ட் 2025",
-    hero_card_title: "நேரடி. வெளிப்படையான. நியாயமான.",
-    hero_card_desc: "அக்ரோஸ்மார்ட் இடைத்தரகர்களை நீக்குகிறது, விவசாயிகள் அதிக வருமானம் ஈட்டுவதையும் வாங்குபவர்கள் சிறந்த விலையில் புதிய தயாரிப்புகளைப் பெறுவதையும் உறுதி செய்கிறது.",
-    hero_card_feat1: "AI விலை பரிந்துரைகள்",
-    hero_card_feat2: "நேரடி ஆர்டர்கள்",
-    hero_card_feat3: "நிகழ்நேர கண்காணிப்பு",
-    f_portal_dashboard: "விவசாயி மேலாண்மை பலகை 🚜",
-    f_portal_manage: "உங்கள் பட்டியல்கள் மற்றும் ஆர்டர்களை ஒரே இடத்தில் நிர்வகிக்கவும்.",
-    f_portal_add_btn: "பட்டியலை வெளியிடவும்",
-    f_portal_listings: "உங்கள் பட்டியல்கள்",
-    f_portal_go_btn: "போர்ட்டலுக்குச் செல்லவும்",
-    b_market_realtime: "நிகழ்நேர இருப்பு",
-    b_market_search_label: "தயாரிப்புகளைத் தேடுங்கள்",
-    b_market_filters: "விரைவான வடிப்பான்கள்",
-    b_market_all: "அனைத்து தயாரிப்புகளும்",
-    b_market_open_btn: "சந்தையைத் திறக்கவும்",
-    pay_delivery_title: "டெலிவரி தகவல்",
-    pay_secure_title: "பாதுகாப்பான கட்டணம்",
-    pay_card_no: "அட்டை எண்",
-    pay_expiry: "காலாவதி",
-    pay_cvv: "சிவிவி (CVV)",
-    pay_processing: "கட்டணம் செலுத்தப்படுகிறது...",
-    pay_success: "ஆர்டர் வெற்றிகரமாக செய்யப்பட்டது!",
-    weather_detecting: "கண்டறியப்படுகிறது...",
-    weather_tomorrow: "நாளை",
-    weather_wed: "புதன்",
-    weather_thu: "வியாழன்",
-    disease_report_title: "அறிகுறிகளைத் புகாரளிக்கவும்",
-    disease_placeholder: "நீங்கள் காண்பதை விளக்குங்கள்: நிற மாற்றம், புள்ளிகள், பூச்சிகள், காய்ந்த இலைகள்...",
-    disease_ai_waiting: "அறிகுறிகளைச் சமர்ப்பித்த பிறகு AI நோயறிதல் இங்கே தோன்றும்.",
-    disease_analyzing: "ஆலமா (Ollama) AI உங்கள் பயிரை ஆய்வு செய்கிறது...",
-    disease_res_reason: "ஏற்படுவதற்கான காரணம்",
-    disease_res_remedy: "தீர்வு",
-    disease_res_medicine: "பரிந்துரைக்கப்பட்ட மருந்துகள்",
-    disease_disclaimer: "பொறுப்புத் துறப்பு: AI பரிந்துரைகள் வழங்கப்பட்ட தரவுகளின் அடிப்படையில் அமைந்தவை. தீவிர சிக்கல்களுக்கு, உள்ளூர் விவசாய அதிகாரியை அணுகவும்.",
-    fert_res_title: "ஆய்வு முடிவு",
-    fert_res_suggested: "பரிந்துரைக்கப்பட்ட உரங்கள்",
-    fert_res_qty: "அளவு",
-    fert_res_freq: "அதிர்வெண் (Frequency)",
-    fert_res_tips: "நிபுணர் குறிப்புகள்",
-    crop_rice: "நெல்",
-    crop_wheat: "கோதுமை",
-    crop_maize: "சோளம்",
-    crop_tomato: "தக்காளி",
-    crop_cotton: "பருத்தி",
-    crop_vegetables: "காய்கறிகள்",
-    crop_fruits: "பழங்கள்",
-    crop_mango: "மாம்பழம்",
-    crop_banana: "வாழைப்பழம்",
-    crop_potato: "உருளைக்கிழங்கு",
-    crop_other: "மற்றவை",
-    soil_alluvial: "வண்டல் மண்",
-    soil_black: "கரிசல் மண்",
-    soil_red: "செம்மண்",
-    soil_sandy: "மணல் மண்",
-    soil_clay: "களிமண்",
-    water_fresh: "நன்னீர்",
-    water_borewell: "ஆழ்துளை கிணறு",
-    water_canal: "கால்வாய்",
-    label_fresh: "புதியது",
-    label_qty: "அளவு",
-    label_buyer: "வாங்குபவர்",
-    label_contact: "தொடர்பு",
-    label_status: "நிலை",
-    label_farmer: "விவசாயி",
-    label_product: "தயாரிப்பு",
-    label_price: "விலை",
-    label_total: "மொத்த தொகை",
-    label_offer: "சலுகை",
-    label_final_price: "இறுதி விலை",
-    btn_edit: "திருத்து",
-    btn_delete: "நீக்கு",
-    btn_accept: "ஏற்றுக்கொள்",
-    btn_reject: "நிராகரி",
-    btn_buy_now: "இப்போது வாங்கவும்",
-    prompt_qty: "தேவையான அளவு (கிலோ)",
-    confirm_delete: "தயாரிப்பை நீக்கவா?",
-    predict_loading: "ஏற்றப்படுகிறது...",
-    predict_no_data: "தரவு இல்லை",
-    label_predict_suggested: "AI பரிந்துரை",
-    weather_min: "குறைந்தபட்சம்",
-    weather_max: "அதிகபட்சம்",
-    weather_wind: "காற்று",
-    weather_rain: "மழை",
-    weather_precip: "மிமீ",
-    weather_kmph: "கிமீ/ம",
-    advisor_title: "விவசாய வானிலை ஆலோசகர்",
-    no_orders: "பெண்டிங் ஆர்டர்கள் இல்லை.",
-    no_listings: "பட்டியல்கள் இன்னும் இல்லை.",
-    alert_order_status: "ஆர்டர் நிலை மாற்றப்பட்டது: ",
-    alert_fill_fields: "தயவுசெய்து அனைத்து இடங்களையும் நிரப்பவும்!",
-    alert_login_buyer: "தொடர வாங்குபவராக உள்நுழையவும்.",
-    alert_login_farmer: "தொடர விவசாயியாக உள்நுழையவும்.",
-    alert_login_general: "தொடர உள்நுழையவும்.",
-    alert_server_error: "சர்வர் பிழை. மீண்டும் முயற்சிக்கவும்.",
-    alert_valid_qty: "தயவுசெய்து சரியான அளவை உள்ளிடவும்.",
-    alert_old_product: "இந்தத் தயாரிப்பு உள்நுழைவு முறை புதுப்பிப்பிற்கு முன்னால் சேர்க்கப்பட்டது. தயவுசெய்து அதை நீக்கிவிட்டு மீண்டும் சேர்க்கவும்.",
-    label_login_farmer: "விவசாயியாக உள்நுழையவும்",
-    label_login_buyer: "வாடிக்கையாளராக உள்நுழையவும்",
-    label_reg_farmer: "விவசாயி கணக்கை உருவாக்குகிறது.",
-    label_reg_buyer: "வாடிக்கையாளர் கணக்கை உருவாக்குகிறது.",
-    alert_new_req: "புதிய அறிவிப்பு!",
-    alert_have_req: "உங்களுக்கு ஒரு புதிய கோரிக்கை உள்ளது.",
-    btn_view_now: "இப்போது காண்க",
-    label_farmer_role: "விவசாயி",
-    label_buyer_role: "வாங்குபவர்",
-    weather_detecting: "கண்டறியப்படுகிறது...",
-    weather_tomorrow: "நாளை",
-    weather_wed: "புதன்",
-    weather_thu: "வியாழன்",
-    weather_fri: "வெள்ளி",
-    weather_sat: "சனி",
-    weather_sun: "ஞாயிறு",
-    weather_mon: "திங்கள்",
-    weather_tue: "செவ்வாய்",
-    weather_rain: "மழை",
-    weather_precip: "மி.மீ",
-    weather_kmph: "கி.மீ/ம",
-    prompt_qty: "அளவை உள்ளிடவும் (கிலோ):",
-    prompt_offer: "உங்கள் விலையை உள்ளிடவும் (₹/கிலோ):",
-    label_product: "தயாரிப்பு",
-    label_qty: "அளவு",
-    label_price: "விலை",
-    label_total: "மொத்த தொகை",
-    crop_rice: "நெல்",
-    crop_wheat: "கோதுமை",
-    crop_maize: "சோளம்",
-    crop_tomato: "தக்காளி",
-    crop_cotton: "பருத்தி",
-    crop_other: "மற்றவை",
-    crop_vegetables: "காய்கறிகள்",
-    crop_fruits: "பழங்கள்",
-    soil_alluvial: "வண்டல் மண்",
-    soil_black: "கரிசல் மண்",
-    soil_red: "செம்மண்",
-    soil_sandy: "மணல் மண்",
-    soil_clay: "களிமண்",
-    water_fresh: "நல்ல நீர்",
-    water_borewell: "ஆழ்துளை கிணறு",
-    water_canal: "கால்வாய்",
-    disease_report_title: "அறிகுறிகளைப் புகாரளிக்கவும்",
-    disease_placeholder: "அறிகுறிகளை விளக்கவும்: நிற மாற்றம், புள்ளிகள், பூச்சிகள், காய்ந்த இலைகள்...",
-    disease_ai_waiting: "அறிகுறிகளைச் சமர்ப்பித்த பிறகு AI நோயறிதல் இங்கே தோன்றும்.",
-    disease_analyzing: "AI உங்கள் பயிரைப் பகுப்பாய்வு செய்கிறது...",
-    disease_res_reason: "ஏற்பட்டதற்கான காரணம்",
-    disease_res_remedy: "தீர்வு / வழிமுறை",
-    disease_res_medicine: "பரிந்துரைக்கப்பட்ட மருந்துகள்",
-    disease_disclaimer: "பொறுப்புத் துறப்பு: வழங்கப்பட்ட தரவுகளின் அடிப்படையில் AI பரிந்துரைகள் வழங்கப்படுகின்றன.",
-    fert_res_title: "பகுப்பாய்வு முடிவு",
-    fert_res_suggested: "பரிந்துரைக்கப்பட்ட அளவு",
-    fert_res_qty: "அளவு",
-    fert_res_freq: "அதிர்வெண்",
-    fert_res_tips: "நிபுணர் குறிப்புகள்",
-    alert_describe_symptoms: "தயவுசெய்து அறிகுறிகளை விளக்கவும்.",
-    alert_analysis_failed: "பகுப்பாய்வு தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்.",
-    alert_server_conn: "சர்வர் இணைப்பு பிழை. உங்கள் இணைப்பைச் சரிபார்க்கவும்.",
-    insight_perfect: "இன்று விவசாயத்திற்கு ஏற்ற சூழல் நிலவுகிறது. அறுவடை அல்லது களையெடுப்பதில் கவனம் செலுத்துங்கள்.",
-    insight_heat: "அதிகப்படியான வெப்பம் கண்டறியப்பட்டுள்ளது. இப்போது உரம் போடுவதைத் தவிர்க்கவும்; இது வேர்களைப் பாதிக்கலாம்.",
-    insight_cold: "குளிர்ந்த வானிலை வளர்ச்சியை மெதுவாக்கும். மண்ணின் வெப்பநிலையைக் கண்காணிக்கவும்.",
-    insight_rain: "மழை வரப்போகிறது. இயற்கை நீர் பாசனம் நல்லது, ஆனால் வெள்ளம் குறித்து கவனமாக இருக்கவும்.",
-    insight_wind: "பலத்த காற்றுயயயால் உயரமான பயிர்கள் சேதமடையக்கூடும். முட்டுக்கொடுக்கவும்.",
-    alert_heat_title: "வெப்ப அலை எச்சரிக்கை",
-    alert_heat_desc: "மாலை நேரங்களில் கூடுதல் நீர் பாசனத்தை உறுதி செய்யவும்.",
-    alert_cold_title: "குளிர் அலை",
-    alert_cold_desc: "இளம் செடிகளை மூடி அல்லது வைக்கோல் கொண்டு பாதுகாக்கவும்.",
-    alert_rain_title: "மழை எதிர்பார்க்கப்படுகிறது",
-    alert_rain_desc: "தண்ணீர் தேங்குவதைத் தவிர்க்க வடிகால் வாய்க்கால்களை சுத்தம் செய்யவும்.",
-    alert_wind_title: "பலத்த காற்று",
-    alert_wind_desc: "கரும்பு அல்லது வாழை போன்ற உயரமான பயிர்களுக்கு முட்டுக்கொடுக்கவும்.",
-    alert_pest_title: "பூச்சி/பூஞ்சை அபாயம்",
-    alert_pest_desc: "அதிக ஈரப்பதம் பூஞ்சை அபாயத்தை அதிகரிக்கும். இலைகளின் அடிப்பகுதியைச் சரிபார்க்கவும்.",
-    alert_disaster: "தீவீர வானிலை கண்டறியப்பட்டுள்ளது! உடனடியாக பாதுகாப்பான இடத்திற்குச் சென்று பயிர்களைப் பாதுகாக்கவும்."
-  },
+
 };
 
-function toggleLanguage() {
-  const current = localStorage.getItem("agroLang") || "en";
-  const next = current === "en" ? "ta" : "en";
-  localStorage.setItem("agroLang", next);
-  applyTranslations();
-}
+
 
 // Helper function to get translated text
 function t(key) {
-  const lang = localStorage.getItem("agroLang") || "en";
-  return (i18n[lang] && i18n[lang][key]) || key;
+  return (i18n.en && i18n.en[key]) || key;
 }
 
 function applyTranslations() {
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
   const els = document.querySelectorAll("[data-i18n]");
   els.forEach(el => {
     const key = el.getAttribute("data-i18n");
@@ -573,7 +334,7 @@ function updateNavbarUser() {
   const navUser = document.getElementById("navUser");
   const loginLink = document.getElementById("loginLink");
   const logoutBtn = document.getElementById("logoutBtn");
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
 
   // Also update top-header avatar + username display (used in new pages)
   const userAvatar = document.getElementById("userAvatar");
@@ -636,11 +397,21 @@ document.addEventListener("DOMContentLoaded", () => {
   initWeather();
   applyTranslations();
 
-  // Attach listener to any langToggle button found
-  const toggleBtn = document.getElementById("langToggle");
-  if (toggleBtn) {
-    toggleBtn.addEventListener("click", toggleLanguage);
-  }
+
+
+
+
+
+
+  // Smooth page transitions for internal links
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest("a[href]");
+    if (!link) return;
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("javascript") || href.startsWith("http") || link.target === "_blank") return;
+    e.preventDefault();
+    navigateTo(href);
+  });
 
   // Reservoir logic
   if (document.getElementById("reservoirTableBody")) {
@@ -736,9 +507,9 @@ async function loginWithRole(role) {
     setCurrentUser(data.user);
 
     if (role === "farmer") {
-      window.location.href = "farmer.html";
+      navigateTo("farmer.html");
     } else {
-      window.location.href = "index.html";
+      navigateTo("index.html");
     }
   } catch (e) {
     msg.textContent = "Server error";
@@ -766,7 +537,7 @@ if (document.getElementById("loginSingleBtn")) {
   }
 
 
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
   // Update label text
   if (label) {
     label.textContent = loginRole === "farmer"
@@ -804,9 +575,9 @@ if (document.getElementById("loginSingleBtn")) {
 
     // Redirect based on role
     if (loginRole === "farmer") {
-      window.location.href = "farmer.html";
+      navigateTo("farmer.html");
     } else {
-      window.location.href = "index.html";
+      navigateTo("index.html");
     }
   });
 }
@@ -819,7 +590,7 @@ if (document.getElementById("registerBtn")) {
   const registerRole = roleFromUrl === "farmer" ? "farmer" : "buyer";
   const label = document.getElementById("regRoleLabel");
 
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
   if (label) {
     label.textContent =
       registerRole === "farmer"
@@ -872,7 +643,7 @@ if (document.getElementById("registerBtn")) {
         msg.textContent = data.message || "Registered";
         msg.classList.add("text-success");
       }
-      setTimeout(() => (window.location.href = `login.html?role=${registerRole}`), 800);
+      setTimeout(() => navigateTo(`login.html?role=${registerRole}`), 800);
     } catch (e) {
       if (msg) {
         msg.textContent = "Server error";
@@ -900,47 +671,55 @@ async function renderProducts(products) {
   const user = getCurrentUser();
   let valid = products.filter(p => p.farmerUsername); // show only valid products
 
-  // FUTURE_MARKETPLACE: buyer location filtering
-  if (user && user.role === "buyer" && user.location) {
-    valid = valid.filter(p => p.location && p.location.toLowerCase() === user.location.toLowerCase());
+  // Declare userDistrict at function scope so it's available in the card loop
+  const userDistrict = (user && user.location) ? user.location.trim().toLowerCase() : null;
+
+  // District-based: local products first, then others
+  if (userDistrict) {
+    const local  = valid.filter(p => p.location && p.location.trim().toLowerCase() === userDistrict);
+    const others = valid.filter(p => !p.location || p.location.trim().toLowerCase() !== userDistrict);
+    valid = [...local, ...others];
   }
 
   if (valid.length === 0) {
     el.innerHTML = `
-      <p class="text-danger fw-bold p-3" data-i18n="no_listings">
-        No new marketplace listings yet for your district.<br>
-        If you see old products, please delete and re-add them in the Farmer Portal.
-      </p>
+      <div class="col-12 text-center py-5">
+        <div style="font-size:3rem;opacity:.3;margin-bottom:1rem;">🌾</div>
+        <h5 class="fw-bold text-muted">No products available yet</h5>
+        <p class="text-muted small">Check back soon — farmers are adding products daily.</p>
+      </div>
     `;
     return;
   }
 
   let html = "";
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
 
-  // No longer needed here as it's a global helper
-  for (let p of valid) {
-    let suggested = i18n[lang]?.predict_loading || "Loading...";
+  // Fetch all prices in parallel for speed
+  const pricePromises = valid.map(p => {
+    const q = new URLSearchParams({ name: p.name, location: p.location });
+    return fetch("/predictPrice?" + q.toString()).then(r => r.json()).catch(() => null);
+  });
+  const prices = await Promise.all(pricePromises);
+
+  for (let i = 0; i < valid.length; i++) {
+    const p = valid[i];
+    const priceData = prices[i];
     const emoji = getCropEmoji(p.name);
+    const isLocal = userDistrict && p.location && p.location.trim().toLowerCase() === userDistrict;
 
-    try {
-      const q = new URLSearchParams({ name: p.name, location: p.location });
-      const res = await fetch("/predictPrice?" + q.toString());
-      const data = await res.json();
-      if (data.suggestedPrice) {
-        suggested = `₹${data.suggestedPrice} <span class="badge bg-white text-success border ms-1" style="font-size: 0.6rem;">${data.reason}</span>`;
-      } else {
-        suggested = i18n[lang]?.predict_no_data || "No data";
-      }
-    } catch { }
+    let suggested = i18n[lang]?.predict_no_data || "No data";
+    if (priceData && priceData.suggestedPrice) {
+      suggested = "₹" + priceData.suggestedPrice + " <span class=\"badge bg-white text-success border ms-1\" style=\"font-size:0.6rem;\">" + priceData.reason + "</span>";
+    }
 
     html += `
     <div class="col-md-4">
       <div class="card p-0 border-0 shadow-sm animate-fade">
         <div class="p-4">
           <div class="d-flex justify-content-between align-items-start mb-3">
-            <h5 class="fw-bold text-success mb-0 d-flex align-items-center gap-2" data-i18n="crop_${p.name.toLowerCase()}"><span>${emoji}</span> ${escapeHtml(p.name)}</h5>
-            <span class="badge bg-light text-success border" data-i18n="label_fresh">Fresh</span>
+            <h5 class="fw-bold text-success mb-0 d-flex align-items-center gap-2"><span>${emoji}</span> ${escapeHtml(p.name)}</h5>
+            <span class="badge bg-light text-success border">Fresh</span>
           </div>
           
           <div class="mb-3">
@@ -949,23 +728,23 @@ async function renderProducts(products) {
           </div>
 
           <div class="suggested-price mb-3">
-            <div class="small"><span data-i18n="label_predict_suggested">AI Suggested</span>: <b>${suggested}</b></div>
+            <div class="small"><span>AI Suggested</span>: <b>${suggested}</b></div>
           </div>
 
           <div class="row g-0 mb-4 text-muted small">
             <div class="col-6 mb-2">
-              <span class="me-1">📦</span><b data-i18n="label_qty">Qty</b>: ${escapeHtml(p.qty)} kg
+              <span class="me-1">📦</span><b>Qty</b>: ${escapeHtml(p.qty)} kg
             </div>
             <div class="col-6 mb-2">
               <span class="me-1">📍</span><b>${escapeHtml(p.location)}</b>
             </div>
             <div class="col-12">
-              <span class="me-1">🧑‍🌾</span><span data-i18n="label_farmer">Farmer</span>: ${escapeHtml(p.farmerUsername)}
+              <span class="me-1">🧑‍🌾</span><span>Farmer</span>: ${escapeHtml(p.farmerUsername)}
             </div>
           </div>
 
           <div class="d-grid gap-2">
-            <button class="btn btn-success btn-sm btn-buy-now" data-product-id="${p.id}" data-i18n="btn_buy_now">
+            <button class="btn btn-success btn-sm btn-buy-now" data-product-id="${p.id}">
               Buy Now
             </button>
             <button class="btn btn-outline-success btn-sm btn-add-cart"
@@ -1008,9 +787,13 @@ async function renderProducts(products) {
 
 // Search box
 function searchProducts() {
-  const s = document.getElementById("searchBox").value.toLowerCase();
+  const box = document.getElementById("searchBox");
+  if (!box || !window.allProducts) return;
+  const s = box.value.toLowerCase().trim();
+  if (!s) { renderProducts(window.allProducts); return; }
   const filtered = window.allProducts.filter(p =>
-    p.name.toLowerCase().includes(s)
+    p.name.toLowerCase().includes(s) ||
+    (p.location && p.location.toLowerCase().includes(s))
   );
   renderProducts(filtered);
 }
@@ -1040,46 +823,60 @@ function filterByCategory(category) {
 // Place order with Payment Modal
 async function orderPrompt(id) {
   const user = getCurrentUser();
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
   if (!user || user.role !== "buyer") {
     alert(i18n[lang]?.alert_login_buyer || "Please login as a buyer to place orders.");
-    window.location.href = "login.html";
+    navigateTo("login.html?role=buyer");
     return;
   }
 
   const p = (window.allProducts || []).find(x => x.id === id);
   if (!p) return;
 
-  const pNameTranslated = i18n[lang][`crop_${p.name.toLowerCase()}`] || p.name;
-  const qty = prompt(`${i18n[lang]?.prompt_qty || "Order quantity for "}${pNameTranslated} (kg)`, "1");
-  if (!qty || isNaN(qty) || qty <= 0) return;
+  const pNameTranslated = (i18n["en"] && i18n["en"]["crop_" + p.name.toLowerCase()]) || p.name;
 
-  const totalAmount = (parseFloat(p.price) * parseFloat(qty)).toFixed(2);
-
-  // Set up modal content
+  // Build qty stepper inside modal summary
   const summaryEl = document.getElementById("paymentOrderSummary");
-  const amountEl = document.getElementById("payAmount");
-  if (summaryEl && amountEl) {
+  const amountEl  = document.getElementById("payAmount");
+  if (summaryEl) {
+    let currentQty = 1;
+    const maxQty   = parseFloat(p.qty);
+    const updateDisplay = () => {
+      const total = (currentQty * parseFloat(p.price)).toFixed(2);
+      const qd = document.getElementById("qtyDisplay");
+      const td = document.getElementById("orderTotalDisplay");
+      if (qd) qd.textContent = currentQty;
+      if (td) td.textContent = "₹" + total;
+      if (amountEl) amountEl.textContent = "₹" + total;
+    };
     summaryEl.innerHTML = `
-      <div class="d-flex justify-content-between mb-2">
-        <span class="text-muted" data-i18n="label_product">${i18n[lang]?.label_product || "Product"}</span>
-        <span class="fw-bold">${escapeHtml(pNameTranslated)}</span>
-      </div>
-      <div class="d-flex justify-content-between mb-2">
-        <span class="text-muted" data-i18n="label_qty">${i18n[lang]?.label_qty || "Quantity"}</span>
-        <span class="fw-bold">${qty} kg</span>
-      </div>
-      <div class="d-flex justify-content-between mb-2">
-        <span class="text-muted" data-i18n="label_price">${i18n[lang]?.label_price || "Price"}</span>
-        <span class="fw-bold">₹${p.price}/kg</span>
+      <div class="d-flex justify-content-between mb-2"><span class="text-muted">Product</span><span class="fw-bold">${escapeHtml(pNameTranslated)}</span></div>
+      <div class="d-flex justify-content-between mb-2"><span class="text-muted">Available</span><span class="fw-bold">${escapeHtml(String(p.qty))} kg</span></div>
+      <div class="d-flex justify-content-between mb-3"><span class="text-muted">Price</span><span class="fw-bold">₹${p.price}/kg</span></div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">Quantity (kg)</label>
+        <div class="d-flex align-items-center gap-3">
+          <div class="qty-control">
+            <div class="qty-btn" id="qtyMinus">-</div>
+            <span id="qtyDisplay" class="fw-bold px-2" style="min-width:36px;text-align:center;">1</span>
+            <div class="qty-btn" id="qtyPlus">+</div>
+          </div>
+          <span class="text-muted small">Max: ${escapeHtml(String(p.qty))} kg</span>
+        </div>
       </div>
       <hr>
       <div class="d-flex justify-content-between">
-        <span class="fw-bold" data-i18n="label_total">${i18n[lang]?.label_total || "Total Amount"}</span>
-        <span class="fw-bold text-success fs-5">₹${totalAmount}</span>
-      </div>
-    `;
-    amountEl.textContent = `₹${totalAmount}`;
+        <span class="fw-bold">Total</span>
+        <span id="orderTotalDisplay" class="fw-bold text-success fs-5">₹${p.price}</span>
+      </div>`;
+    if (amountEl) amountEl.textContent = "₹" + p.price;
+    setTimeout(() => {
+      const minus = document.getElementById("qtyMinus");
+      const plus  = document.getElementById("qtyPlus");
+      if (minus) minus.onclick = () => { if (currentQty > 1) { currentQty--; updateDisplay(); } };
+      if (plus)  plus.onclick  = () => { if (currentQty < maxQty) { currentQty++; updateDisplay(); } };
+    }, 100);
+    window._orderQtyGetter = () => currentQty;
   }
 
   // Pre-fill user details if available
@@ -1098,11 +895,14 @@ async function orderPrompt(id) {
   const errorEl = document.getElementById("paymentError");
 
   confirmBtn.onclick = async () => {
+    const qty = window._orderQtyGetter ? window._orderQtyGetter() : 1;
+    const totalAmount = (parseFloat(p.price) * parseFloat(qty)).toFixed(2);
+    if (amountEl) amountEl.textContent = "₹" + totalAmount;
+
     const cardNumber = document.getElementById("payCardNumber").value.trim();
     const expiry = document.getElementById("payExpiry").value.trim();
     const cvv = document.getElementById("payCvv").value.trim();
 
-    // New fields
     const buyerName = document.getElementById("payBuyerName").value.trim();
     const buyerPhone = document.getElementById("payBuyerPhone").value.trim();
     const address = document.getElementById("payBuyerAddress").value.trim();
@@ -1138,7 +938,7 @@ async function orderPrompt(id) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           productId: id,
-          qty,
+          qty: qty,
           price: p.price,
           buyerName: buyerName,
           buyerContact: buyerPhone,
@@ -1191,11 +991,16 @@ if (document.getElementById("products")) fetchProducts();
 
 if (document.getElementById("marketPageMarker")) {
   const user = getCurrentUser();
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
   if (!user || user.role !== "buyer") {
     alert(i18n[lang]?.alert_login_buyer || "Please login as a buyer to access the marketplace.");
-    window.location.href = "login.html?role=buyer";
+    navigateTo("login.html?role=buyer");
   }
+}
+
+if (document.getElementById("marketHomePageMarker")) {
+  const user = getCurrentUser();
+  if (!user || user.role !== "buyer") navigateTo("login.html?role=buyer");
 }
 
 /* ---------- FARMER PORTAL ---------- */
@@ -1203,12 +1008,17 @@ if (document.getElementById("marketPageMarker")) {
 // Protect farmer page and initialize dashboard
 if (document.getElementById("farmerPageMarker")) {
   const user = getCurrentUser();
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
   if (!user || user.role !== "farmer") {
     alert(i18n[lang]?.alert_login_farmer || "Please login as a farmer to access this page.");
-    window.location.href = "login.html?role=farmer";
+    navigateTo("login.html?role=farmer");
   } else {
     // attach add button handler
+    // Auto-fill location from user profile
+    const locInput = document.getElementById("location");
+    if (locInput && user.location && !locInput.value) locInput.value = user.location;
+
+
     if (document.getElementById("addBtn")) {
       document.getElementById("addBtn").addEventListener("click", async () => {
         const product = {
@@ -1238,9 +1048,11 @@ if (document.getElementById("farmerPageMarker")) {
         document.getElementById("name").value = "";
         document.getElementById("price").value = "";
         document.getElementById("qty").value = "";
-        document.getElementById("location").value = "";
+        // Re-fill location from profile
+        if (locInput && user.location) locInput.value = user.location;
 
         loadFarmerProducts();
+        showToast("Product listed successfully!", "AgroSmart");
       });
     }
 
@@ -1267,8 +1079,8 @@ function startFarmerNotificationPolling() {
       const myOrdersCount = orders.filter(o => o.farmerUsername === user.username && o.status === "placed").length;
 
       if (lastOrderCount !== null && myOrdersCount > lastOrderCount) {
-        showFarmerNotification(i18n[localStorage.getItem("agroLang") || "en"]?.alert_new_req || "New Order Received! 📦", 
-                               (i18n[localStorage.getItem("agroLang") || "en"]?.alert_have_req || "You have a new request.") + " (" + myOrdersCount + ")");
+        showFarmerNotification(i18n["en"]?.alert_new_req || "New Order Received! 📦", 
+                               (i18n["en"]?.alert_have_req || "You have a new request.") + " (" + myOrdersCount + ")");
         if (typeof loadFarmerOrders === 'function') loadFarmerOrders(); 
       } 
 
@@ -1358,29 +1170,91 @@ async function editProduct(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
 
-  const newPrice = prompt("New Price", p.price);
-  const newQty = prompt("New Qty (kg)", p.qty);
-  const newLoc = prompt("New Location", p.location);
+  const existing = document.getElementById("editProductModal");
+  if (existing) existing.remove();
 
-  await fetch("/updateProduct", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id, price: newPrice, qty: newQty, location: newLoc })
-  });
+  const wrap = document.createElement("div");
+  wrap.id = "editProductModal";
+  wrap.innerHTML = `
+    <div class="modal fade" id="editProductModalInner" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:18px;border:none;">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title fw-bold">Edit Listing</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body pt-2">
+            <div class="mb-3"><label class="form-label">Price (Rs./kg)</label>
+              <input id="editPrice" type="number" class="form-control" value="${p.price}"></div>
+            <div class="mb-3"><label class="form-label">Quantity (kg)</label>
+              <input id="editQty" type="number" class="form-control" value="${p.qty}"></div>
+            <div class="mb-3"><label class="form-label">Location</label>
+              <input id="editLoc" class="form-control" value="${p.location}"></div>
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            <button id="saveEditBtn" class="btn btn-success fw-bold px-4">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(wrap);
 
-  loadFarmerProducts();
+  const bsModal = new bootstrap.Modal(document.getElementById("editProductModalInner"));
+  bsModal.show();
+
+  document.getElementById("saveEditBtn").onclick = async () => {
+    const newPrice = document.getElementById("editPrice").value.trim();
+    const newQty   = document.getElementById("editQty").value.trim();
+    const newLoc   = document.getElementById("editLoc").value.trim();
+    if (!newPrice || !newQty || !newLoc) { showToast("Fill all fields", "Error"); return; }
+    await fetch("/updateProduct", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, price: newPrice, qty: newQty, location: newLoc })
+    });
+    bsModal.hide();
+    showToast("Listing updated!");
+    loadFarmerProducts();
+  };
 }
 
 // Delete product
 async function deleteProduct(id) {
-  const lang = localStorage.getItem("agroLang") || "en";
-  if (!confirm(i18n[lang]?.confirm_delete || "Delete product?")) return;
-  await fetch("/deleteProduct", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id })
-  });
-  loadFarmerProducts();
+  const existing = document.getElementById("deleteConfirmModal");
+  if (existing) existing.remove();
+
+  const wrap = document.createElement("div");
+  wrap.id = "deleteConfirmModal";
+  wrap.innerHTML = `
+    <div class="modal fade" id="deleteConfirmModalInner" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content text-center p-4" style="border-radius:18px;border:none;">
+          <div style="font-size:2.5rem;margin-bottom:.75rem;">Delete?</div>
+          <h6 class="fw-bold mb-2">Remove this listing?</h6>
+          <p class="text-muted small mb-4">This cannot be undone.</p>
+          <div class="d-flex gap-2">
+            <button class="btn btn-light flex-fill" data-bs-dismiss="modal">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn btn-danger flex-fill fw-bold">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(wrap);
+
+  const bsModal = new bootstrap.Modal(document.getElementById("deleteConfirmModalInner"));
+  bsModal.show();
+
+  document.getElementById("confirmDeleteBtn").onclick = async () => {
+    await fetch("/deleteProduct", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id })
+    });
+    bsModal.hide();
+    showToast("Listing deleted");
+    loadFarmerProducts();
+  };
 }
 
 // Farmer: orders dashboard
@@ -1396,9 +1270,8 @@ async function loadFarmerOrders() {
 
   // show stats for ALL orders
   const allMine = orders.filter(o => o.farmerUsername === user.username);
-  const pending = allMine.filter(o => o.status === "placed" || o.status === "accepted");
-  const completed = allMine.filter(o => o.status === "completed");
-  const recentSalesVal = completed.reduce((sum, o) => sum + (Number(o.price) * Number(o.qty)), 0);
+  const pending = allMine.filter(o => o.status === "placed");
+  const recentSalesVal = allMine.filter(o => o.paymentStatus === "completed").reduce((sum, o) => sum + (Number(o.price) * Number(o.qty)), 0);
 
   if (document.getElementById("farmerTotalOrders")) document.getElementById("farmerTotalOrders").textContent = allMine.length;
   if (document.getElementById("farmerPendingOrders")) document.getElementById("farmerPendingOrders").textContent = pending.length;
@@ -1415,36 +1288,24 @@ async function loadFarmerOrders() {
     return;
   }
 
-  container.innerHTML = mine
-    .map(
-      o => `
+  container.innerHTML = mine.map(o => `
       <div class="col-md-6">
-        <div class="card p-3">
-          <h6>${escapeHtml(o.productName)}</h6>
-
-          <p><b>${t('label_qty')}</b>: ${escapeHtml(o.qty)} kg @ ₹${escapeHtml(o.price)}</p>
-
-          <p class="small text-muted">
-            <b>${t('label_buyer')}</b>: ${escapeHtml(o.buyerName)} <br>
-            <b>${t('label_contact')}</b>: ${escapeHtml(o.buyerContact || "")}
-          </p>
-
-          <p>${t('label_status')}: <b>${escapeHtml(o.status)}</b></p>
-
-          <div class="d-flex gap-2 mt-2">
-            <button class="btn btn-success btn-sm"
-                    onclick="updateOrderStatus(${o.id}, 'accepted')">
-              ${t('btn_accept')}
-            </button>
-            <button class="btn btn-danger btn-sm"
-                    onclick="updateOrderStatus(${o.id}, 'rejected')">
-              ${t('btn_reject')}
-            </button>
+        <div class="card p-4 border-0 shadow-sm" style="border-radius:var(--radius);border-left:4px solid var(--accent)!important;">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h6 class="fw-bold text-dark mb-0">${getCropEmoji(o.productName)} ${escapeHtml(o.productName)}</h6>
+            <span class="badge status-placed">New Order</span>
+          </div>
+          <div class="row g-2 mb-3 text-muted small">
+            <div class="col-6"><b>Qty:</b> ${escapeHtml(String(o.qty))} kg @ ₹${escapeHtml(String(o.price))}</div>
+            <div class="col-6"><b>Buyer:</b> ${escapeHtml(o.buyerName)}</div>
+            <div class="col-12"><b>Contact:</b> ${escapeHtml(o.buyerContact || "—")}</div>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-success btn-sm flex-fill fw-bold" onclick="updateOrderStatus(${o.id}, 'accepted')">✓ Accept</button>
+            <button class="btn btn-outline-danger btn-sm flex-fill fw-bold" onclick="updateOrderStatus(${o.id}, 'rejected')">✗ Reject</button>
           </div>
         </div>
-      </div>`
-    )
-    .join("");
+      </div>`).join("");
 }
 
 async function updateOrderStatus(id, status) {
@@ -1455,7 +1316,7 @@ async function updateOrderStatus(id, status) {
   });
 
   await res.json();
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
   showToast(i18n[lang]?.alert_order_status || "Order Updated!", status);
   loadFarmerOrders();
 }
@@ -1536,7 +1397,7 @@ async function loadBuyerOrders() {
   const mine = orders.filter(o => o.buyerName === user.username);
 
   if (mine.length === 0) {
-    el.innerHTML = `<div class="p-4 text-center text-muted col-12"><p class="mb-0" data-i18n="no_buyer_orders">No orders yet.</p></div>`;
+    el.innerHTML = `<div class="p-4 text-center text-muted col-12"><p class="mb-0">No orders yet.</p></div>`;
     return;
   }
 
@@ -1546,7 +1407,7 @@ async function loadBuyerOrders() {
         <span class="fs-5 me-2 align-middle">${getCropEmoji(o.productName)}</span>${escapeHtml(o.productName)}
       </td>
       <td class="align-middle">
-        <span class="d-block small text-muted text-uppercase fw-bold" data-i18n="label_qty">Qty</span>
+        <span class="d-block small text-muted text-uppercase fw-bold">Qty</span>
         <span class="fw-bold text-dark">${escapeHtml(o.qty)} kg</span>
       </td>
       <td class="align-middle">
@@ -1632,11 +1493,11 @@ function saveCart(cart) {
 
 function addToCart(product) {
   const user = getCurrentUser();
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
   
   if (!user || user.role !== "buyer") {
     alert(i18n[lang]?.alert_login_buyer || "Please login as a buyer to add items to cart.");
-    window.location.href = "login.html";
+    navigateTo("login.html?role=buyer");
     return;
   }
 
@@ -1698,16 +1559,12 @@ function clearCart() {
 function updateCartUI() {
   const cart = getCartItems();
   const counts = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const badges = document.querySelectorAll("#cartBadge");
-  
-  badges.forEach(badge => {
-    if (counts > 0) {
-      badge.textContent = counts;
-      badge.style.display = 'block';
-    } else {
-      badge.style.display = 'none';
-    }
+  document.querySelectorAll("#cartBadge").forEach(badge => {
+    badge.textContent = counts;
+    badge.style.display = counts > 0 ? "block" : "none";
   });
+  const sb = document.getElementById("sidebarCartCount");
+  if (sb) { sb.textContent = counts; sb.style.display = counts > 0 ? "inline" : "none"; }
 }
 
 // Initialize cart UI on load
@@ -1783,10 +1640,10 @@ function updateSummary(totalItems, totalPrice) {
 
 async function checkoutCart() {
   const user = getCurrentUser();
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
   if (!user || user.role !== "buyer") {
     alert(i18n[lang]?.alert_login_buyer || "Please login as a buyer to checkout.");
-    window.location.href = "login.html";
+    navigateTo("login.html?role=buyer");
     return;
   }
 
@@ -1826,6 +1683,7 @@ async function checkoutCart() {
   if (!confirmBtn) return;
 
   confirmBtn.onclick = async () => {
+    const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
     const cardNumber = document.getElementById("payCardNumber")?.value.trim();
     const expiry = document.getElementById("payExpiry")?.value.trim();
     const cvv = document.getElementById("payCvv")?.value.trim();
@@ -1851,7 +1709,7 @@ async function checkoutCart() {
       const pRes = await fetch("/process-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cardNumber, expiry, cvv, amount: totalAmount })
+        body: JSON.stringify({ cardNumber, expiry, cvv, amount: cartTotal })
       });
 
       const pData = await pRes.json();
@@ -1892,7 +1750,7 @@ async function checkoutCart() {
       setTimeout(() => {
         clearCart();
         modal.hide();
-        window.location.href = "buyer-orders.html";
+        navigateTo("buyer-orders.html");
       }, 2000);
 
     } catch (err) {
@@ -1913,7 +1771,7 @@ function initWeather() {
   const banner = document.getElementById("weatherBanner");
   if (!banner) return;
 
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
 
   if (!navigator.geolocation) {
     if (document.getElementById("weatherDesc")) {
@@ -1950,7 +1808,7 @@ function initWeather() {
           if (document.getElementById("weatherIcon")) document.getElementById("weatherIcon").textContent = infoIcon;
           if (document.getElementById("weatherDate")) {
             const now = new Date();
-            document.getElementById("weatherDate").textContent = now.toLocaleDateString(lang === 'ta' ? 'ta-IN' : 'en-US', { weekday: 'long', day: 'numeric', month: 'short' });
+            document.getElementById("weatherDate").textContent = now.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' });
           }
 
           // New metrics
@@ -1984,7 +1842,7 @@ function initWeather() {
             for (let i = 1; i <= 3; i++) { // Next 3 days
               if (daily.time[i]) {
                 const fDate = new Date(daily.time[i]);
-                const dayStr = fDate.toLocaleDateString(lang === 'ta' ? 'ta-IN' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                const dayStr = fDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
                 const code = daily.weather_code[i];
                 const maxT = Math.round(daily.temperature_2m_max[i]);
                 const minT = Math.round(daily.temperature_2m_min[i]);
@@ -2083,7 +1941,7 @@ async function loadReservoirData() {
   try {
     const res = await fetch("/api/reservoir");
     const data = await res.json();
-    const lang = localStorage.getItem("agroLang") || "en";
+    const lang = "en";
 
     let html = "";
     let floodWarning = false;
@@ -2153,7 +2011,6 @@ async function loadReservoirData() {
   }
 }
 
-if (document.getElementById("reservoirTableBody")) loadReservoirData();
 
 async function loadNews() {
   const container = document.getElementById("newsContainer");
@@ -2199,32 +2056,16 @@ if (document.getElementById("newsContainer")) loadNews();
 /* ========== WEATHER MODULE ========== */
 
 // Weather icon mapping
-function getWeatherIcon(code, isDay = true) {
+function getWeatherIcon(code) {
   const icons = {
-    0: "☀️",      // Clear sky
-    1: "🌤️",     // Mainly clear
-    2: "⛅",     // Partly cloudy
-    3: "☁️",     // Overcast
-    45: "🌫️",    // Fog
-    48: "🌫️",    // Depositing rime fog
-    51: "🌦️",    // Drizzle light
-    53: "🌦️",    // Drizzle moderate
-    55: "🌧️",    // Drizzle dense
-    61: "🌧️",    // Rain slight
-    63: "🌧️",    // Rain moderate
-    65: "🌧️",    // Rain heavy
-    71: "🌨️",    // Snow slight
-    73: "🌨️",    // Snow moderate
-    75: "❄️",     // Snow heavy
-    77: "🌨️",    // Snow grains
-    80: "🌦️",    // Rain showers slight
-    81: "🌧️",    // Rain showers moderate
-    82: "⛈️",     // Rain showers violent
-    85: "🌨️",    // Snow showers slight
-    86: "❄️",     // Snow showers heavy
-    95: "⛈️",     // Thunderstorm
-    96: "⛈️",     // Thunderstorm with hail
-    99: "⛈️"      // Thunderstorm with heavy hail
+    0:"☀️", 1:"🌤️", 2:"⛅", 3:"☁️",
+    45:"🌫️", 48:"🌫️",
+    51:"🌦️", 53:"🌦️", 55:"🌧️",
+    61:"🌧️", 63:"🌧️", 65:"🌧️",
+    71:"🌨️", 73:"🌨️", 75:"❄️", 77:"🌨️",
+    80:"🌦️", 81:"🌧️", 82:"⛈️",
+    85:"🌨️", 86:"❄️",
+    95:"⛈️", 96:"⛈️", 99:"⛈️"
   };
   return icons[code] || "🌤️";
 }
@@ -2503,28 +2344,44 @@ async function renderRecommendations() {
   const newestContainer = document.getElementById("newestProducts");
   if (!container && !newestContainer) return;
 
-  const products = window.allProducts || [];
-  if (products.length === 0) return;
+  // Always fetch fresh products
+  let products = window.allProducts;
+  if (!products || products.length === 0) {
+    try {
+      const res = await fetch("/products");
+      products = await res.json();
+      window.allProducts = products;
+    } catch (e) {
+      if (container) container.innerHTML = '<div class="col-12 text-center text-muted py-4">Could not load recommendations.</div>';
+      return;
+    }
+  }
+
+  const validProducts = products.filter(p => p.farmerUsername);
+  if (validProducts.length === 0) {
+    if (container) container.innerHTML = '<div class="col-12 text-center text-muted py-4">No products available yet.</div>';
+    return;
+  }
 
   const user = getCurrentUser();
-  const lang = localStorage.getItem("agroLang") || "en";
+  const lang = "en";
+  const userDistrict = (user && user.location) ? user.location.trim().toLowerCase() : null;
 
-  // Recommended: Same location as user if available, otherwise high variety
+  // District-first: local products first, then others
   let recommended = [];
-  if (user && user.location) {
-    recommended = products.filter(p => p.location === user.location).slice(0, 4);
-  }
-  
-  if (recommended.length < 4) {
-    const others = products.filter(p => !recommended.includes(p));
-    recommended = recommended.concat(others.slice(0, 4 - recommended.length));
+  if (userDistrict) {
+    const local  = validProducts.filter(p => p.location && p.location.trim().toLowerCase() === userDistrict);
+    const others = validProducts.filter(p => !p.location || p.location.trim().toLowerCase() !== userDistrict);
+    recommended  = [...local, ...others].slice(0, 4);
+  } else {
+    recommended = validProducts.slice(0, 4);
   }
 
-  // Newest: Last 4 products
-  const newest = [...products].reverse().slice(0, 4);
-
+  // Newest: Last 4 by id (timestamp)
+  const newest = [...validProducts].sort((a, b) => b.id - a.id).slice(0, 4);
   const renderCard = (p) => {
-    const pName = i18n[lang][`crop_${p.name.toLowerCase()}`] || p.name;
+    const pName = (i18n["en"] && i18n["en"]["crop_" + p.name.toLowerCase()]) || p.name;
+    const isLocal = userDistrict && p.location && p.location.trim().toLowerCase() === userDistrict;
     return `
       <div class="col-md-3">
         <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden product-card animate-fade">
@@ -2532,8 +2389,9 @@ async function renderRecommendations() {
             <div class="product-image-placeholder bg-light d-flex align-items-center justify-content-center" style="height: 160px;">
               ${p.image ? `<img src="${p.image}" class="w-100 h-100" style="object-fit: cover;">` : `<span style="font-size: 4rem;">${getCropEmoji(p.name)}</span>`}
             </div>
-            <div class="position-absolute top-0 end-0 m-2">
+            <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-1 align-items-end">
               <span class="badge bg-success shadow-sm">₹${p.price}/kg</span>
+              ${isLocal ? "<span class='district-badge' style='font-size:0.68rem;'>Your District</span>" : ""}
             </div>
           </div>
           <div class="card-body p-3">
@@ -2541,7 +2399,7 @@ async function renderRecommendations() {
             <p class="text-muted small mb-2"><span class="icon">📍</span> ${escapeHtml(p.location || 'Unknown')}</p>
             <div class="d-flex justify-content-between align-items-center">
               <span class="small text-muted">Farmer: ${escapeHtml(p.farmerUsername)}</span>
-              <button class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="window.location.href='index.html?search=${encodeURIComponent(p.name)}'">View</button>
+              <a href="index.html" class="btn btn-sm btn-success w-100 fw-bold">View in Market</a>
             </div>
           </div>
         </div>
@@ -2557,8 +2415,8 @@ function handleCartClick() {
   const user = getCurrentUser();
   if (!user || user.role !== 'buyer') {
     alert("Please sign in as a buyer to view your cart.");
-    window.location.href = "login.html?role=buyer";
+    navigateTo("login.html?role=buyer");
     return;
   }
-  window.location.href = "cart.html";
+  navigateTo("cart.html");
 }

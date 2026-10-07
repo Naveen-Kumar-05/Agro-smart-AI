@@ -1,6 +1,5 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,223 +8,220 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
-    .home-hero {
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #f0fdf4 100%);
-      padding: 5rem 0 4rem;
-    }
-    .home-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
-    .feature-card {
-      border-radius: 20px;
-      transition: all 0.3s ease;
-      border: 1px solid var(--border);
-    }
-    .feature-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px rgba(46,125,50,0.12);
-    }
-    .feature-icon {
-      width: 72px; height: 72px;
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem;
-      margin-bottom: 1.25rem;
-    }
-    .home-nav {
-      background: white;
-      border-bottom: 1px solid var(--border);
-      position: sticky; top: 0; z-index: 1000;
-      padding: 1rem 2rem;
-      display: flex; align-items: center; justify-content: space-between;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    }
-    .nav-brand {
-      font-size: 1.5rem; font-weight: 800;
-      color: var(--primary) !important;
-      text-decoration: none;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-    .nav-links { display: flex; align-items: center; gap: 0.5rem; }
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 500;
-      padding: 0.5rem 0.9rem;
-      border-radius: 8px;
-      transition: all 0.2s;
-      font-size: 0.95rem;
-    }
-    .nav-links a:hover { background: var(--bg); color: var(--primary); }
-    .stats-bar {
-      background: var(--primary);
-      color: white;
-      padding: 0.75rem 2rem;
-    }
+    .stats-bar { background: linear-gradient(90deg, var(--primary-dark), var(--primary)); color: white; padding: 0.7rem 2rem; }
     .stat-item { text-align: center; }
     .stat-number { font-size: 1.5rem; font-weight: 800; display: block; }
-    .stat-label { font-size: 0.75rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; }
-
-    @media (max-width: 768px) {
-      .home-nav { padding: 0.75rem 1rem; }
-      .nav-links .d-none-sm { display: none; }
-      .home-hero { padding: 3rem 0 2rem; }
-    }
+    .stat-label  { font-size: 0.72rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; }
+    .hero-badge  { background: rgba(26,122,46,0.1); color: var(--primary); border: 1px solid rgba(26,122,46,0.2); border-radius: 50px; padding: 0.4rem 1.1rem; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+    .hero-card   { background: linear-gradient(135deg, #0d2414 0%, var(--primary) 60%, var(--primary-light) 100%); border-radius: 24px; padding: 2.5rem; color: white; box-shadow: 0 20px 60px rgba(26,122,46,0.35); }
+    .hero-feat   { display: flex; align-items: center; gap: 12px; padding: 0.85rem 1.1rem; background: rgba(255,255,255,0.1); border-radius: 12px; margin-bottom: 0.6rem; transition: var(--transition); }
+    .hero-feat:hover { background: rgba(255,255,255,0.18); transform: translateX(4px); }
+    .section-eyebrow { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--primary); margin-bottom: 0.5rem; }
+    .portal-card { border-radius: 20px; overflow: hidden; border: 1px solid var(--border); transition: var(--transition); background: white; }
+    .portal-card:hover { transform: translateY(-8px); box-shadow: 0 24px 56px rgba(26,122,46,0.16); border-color: rgba(26,122,46,0.2); }
+    .portal-card-header { padding: 2rem 2rem 1.5rem; }
+    .portal-card-body   { padding: 0 2rem 2rem; }
+    .portal-icon { width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 1.25rem; }
+    .testimonial-card { background: white; border-radius: 16px; padding: 1.75rem; border: 1px solid var(--border); transition: var(--transition); }
+    .testimonial-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .trust-bar { background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.5rem 0; }
+    .trust-item { display: flex; align-items: center; gap: 10px; color: var(--text-muted); font-weight: 600; font-size: 0.9rem; }
+    @media (max-width: 768px) { .home-nav { padding: 0.75rem 1rem; } .hero-card { padding: 1.75rem; } }
   </style>
 </head>
-
 <body>
 
-  <!-- Top Navigation -->
-  <nav class="home-nav">
-    <a href="home.html" class="nav-brand">🌾 AgroSmart</a>
-    <div class="nav-links">
-      <a href="home.html" class="d-none d-md-inline">Home</a>
-      <a href="login.html?role=buyer" class="d-none d-md-inline">Marketplace</a>
-      <a href="news.html" class="d-none d-md-inline">News</a>
-      <a href="reservoir.html" class="d-none d-md-inline">Reservoir</a>
-      <a href="javascript:void(0)" onclick="handleCartClick()" style="position:relative;">
-        🛒
-        <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light" style="font-size:0.6rem; display:none;">0</span>
-      </a>
-      <span id="navUser" class="d-none d-md-inline fw-semibold ms-2" style="color: var(--text-muted);"></span>
-      <a id="logoutBtn" href="#" onclick="logout()" class="btn btn-sm btn-outline-secondary d-none ms-1">Logout</a>
-      <a id="loginBtn" href="login.html" class="btn btn-sm btn-success ms-1">Sign In</a>
-    </div>
-  </nav>
+<!-- Top Navigation -->
+<nav class="home-nav">
+  <a href="home.html" class="nav-brand">🌾 AgroSmart</a>
+  <div class="nav-links">
+    <a href="home.html" class="d-none d-md-inline">Home</a>
+    <a href="news.html" class="d-none d-md-inline">News</a>
+    <a href="reservoir.html" class="d-none d-md-inline">Reservoirs</a>
+    <a href="login.html?role=buyer" class="d-none d-md-inline">Marketplace</a>
+    <a id="logoutBtn" href="#" onclick="logout()" class="btn btn-sm btn-outline-secondary d-none ms-1">Logout</a>
+    <a id="loginBtn" href="login.html" class="btn btn-sm btn-success ms-1">Sign In</a>
+  </div>
+</nav>
 
-  <!-- Stats Bar -->
-  <div class="stats-bar d-none d-md-block">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-3 stat-item">
-          <span class="stat-number">500+</span>
-          <span class="stat-label">Farmers</span>
+<!-- Stats Bar -->
+<div class="stats-bar d-none d-md-block">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-3 stat-item"><span class="stat-number">500+</span><span class="stat-label">Farmers</span></div>
+      <div class="col-3 stat-item"><span class="stat-number">1,200+</span><span class="stat-label">Products Listed</span></div>
+      <div class="col-3 stat-item"><span class="stat-number">3,000+</span><span class="stat-label">Orders Fulfilled</span></div>
+      <div class="col-3 stat-item"><span class="stat-number">38</span><span class="stat-label">TN Districts</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Hero Section -->
+<section class="home-hero animate-fade">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 text-center text-lg-start">
+        <div class="hero-badge mb-3">🌿 AI-Powered Agriculture Platform</div>
+        <h1 class="fw-bold text-dark mb-4">
+          The Future of <span style="color: var(--primary);">Farming</span> is Here 🌾
+        </h1>
+        <p class="lead text-muted mb-5" style="font-size: 1.1rem; line-height: 1.8;">
+          A smart farm-to-market platform connecting local farmers directly with buyers.
+          Experience transparency, AI-driven pricing, and seamless ordering.
+        </p>
+        <div class="d-flex gap-3 flex-wrap justify-content-center justify-content-lg-start">
+          <a href="login.html?role=buyer" class="btn btn-success btn-lg px-5 fw-bold">Browse Market</a>
+          <a href="register.html?role=farmer" class="btn btn-outline-success btn-lg px-5 fw-bold">Join as Farmer</a>
         </div>
-        <div class="col-3 stat-item">
-          <span class="stat-number">1200+</span>
-          <span class="stat-label">Products</span>
+        <div class="d-flex gap-4 mt-4 justify-content-center justify-content-lg-start">
+          <div class="text-center"><div class="fw-bold text-dark fs-5">Free</div><div class="text-muted small">To Join</div></div>
+          <div style="width:1px; background: var(--border);"></div>
+          <div class="text-center"><div class="fw-bold text-dark fs-5">0%</div><div class="text-muted small">Commission</div></div>
+          <div style="width:1px; background: var(--border);"></div>
+          <div class="text-center"><div class="fw-bold text-dark fs-5">24/7</div><div class="text-muted small">Platform</div></div>
         </div>
-        <div class="col-3 stat-item">
-          <span class="stat-number">3000+</span>
-          <span class="stat-label">Orders Fulfilled</span>
-        </div>
-        <div class="col-3 stat-item">
-          <span class="stat-number">98%</span>
-          <span class="stat-label">Satisfaction</span>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-card">
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <div style="width:50px;height:50px;background:rgba(255,255,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;">🌾</div>
+            <div>
+              <h4 class="mb-0 fw-bold">Direct. Transparent. Fair.</h4>
+              <small class="opacity-75">Trusted by farmers across Tamil Nadu</small>
+            </div>
+          </div>
+          <p class="opacity-80 mb-4" style="font-size:0.95rem;">AgroSmart eliminates middlemen, ensuring farmers earn more and buyers get the freshest produce at the best prices.</p>
+          <div class="hero-feat"><span class="fs-5">🤖</span><span class="fw-medium">AI Price Suggestions</span></div>
+          <div class="hero-feat"><span class="fs-5">📦</span><span class="fw-medium">Real-time Inventory & Order Tracking</span></div>
+          <div class="hero-feat"><span class="fs-5">🌤️</span><span class="fw-medium">Weather & Reservoir Monitoring</span></div>
+          <div class="hero-feat"><span class="fs-5">🔬</span><span class="fw-medium">AI Disease & Fertilizer Analysis</span></div>
         </div>
       </div>
     </div>
   </div>
+</section>
 
-
-
-  <!-- Hero Section -->
-  <div class="home-hero animate-fade">
-    <div class="container">
-      <div class="row align-items-center g-5">
-        <div class="col-lg-6 text-center text-lg-start">
-          <span class="badge bg-success bg-opacity-10 text-success fw-bold mb-3 px-3 py-2" style="border-radius: 50px; font-size: 0.8rem;">🌿 AI-Powered Agriculture Platform</span>
-          <h1 class="fw-bold text-dark mb-4" data-i18n="hero_title">
-            The Future of <span style="color: var(--primary);">Farming</span> is Here 🌾
-          </h1>
-          <p class="lead text-muted mb-5" style="font-size: 1.1rem; line-height: 1.8;" data-i18n="hero_subtitle">
-            A smart farm-to-market platform connecting local farmers directly with buyers.
-            Experience transparency, AI-driven pricing, and seamless ordering.
-          </p>
-          <div class="d-flex gap-3 flex-wrap justify-content-center justify-content-lg-start">
-            <a href="login.html?role=buyer" class="btn btn-success btn-lg px-5 py-3 fw-bold" style="border-radius: 12px;" data-i18n="hero_market_btn">Browse Market</a>
-            <a href="login.html?role=farmer" class="btn btn-outline-success btn-lg px-5 py-3 fw-bold" style="border-radius: 12px;" data-i18n="hero_farmer_btn">Join as Farmer</a>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="p-5 text-white rounded-4 shadow-lg" style="background: linear-gradient(135deg, #065f46, #10b981);">
-            <div class="d-flex align-items-center gap-3 mb-4">
-              <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 12px; display:flex; align-items:center; justify-content:center; font-size: 1.5rem;">🌾</div>
-              <div>
-                <h4 class="mb-0 fw-bold" data-i18n="hero_card_title">Direct. Transparent. Fair.</h4>
-                <small class="opacity-75">Trusted by farmers across Tamil Nadu</small>
-              </div>
-            </div>
-            <p class="opacity-75 mb-4" data-i18n="hero_card_desc">AgroSmart eliminates middlemen, ensuring farmers earn more and buyers get the freshest produce at the best prices.</p>
-            <div class="d-flex flex-column gap-2">
-              <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background: rgba(255,255,255,0.1);">
-                <span class="fs-5">✅</span>
-                <span class="fw-medium" data-i18n="hero_card_feat1">AI-Powered Price Suggestions</span>
-              </div>
-              <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background: rgba(255,255,255,0.1);">
-                <span class="fs-5">✅</span>
-                <span class="fw-medium">Real-time Inventory & Tracking</span>
-              </div>
-              <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background: rgba(255,255,255,0.1);">
-                <span class="fs-5">✅</span>
-                <span class="fw-medium">Weather & Reservoir Monitoring</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<!-- Trust Bar -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="row justify-content-center g-4">
+      <div class="col-auto"><div class="trust-item"><span>🔒</span> Secure Payments</div></div>
+      <div class="col-auto"><div class="trust-item"><span>🌱</span> 100% Local Produce</div></div>
+      <div class="col-auto"><div class="trust-item"><span>⚡</span> Real-time Updates</div></div>
+      <div class="col-auto"><div class="trust-item"><span>🗣️</span> Tamil & English Support</div></div>
+      <div class="col-auto"><div class="trust-item"><span>📱</span> Mobile Friendly</div></div>
     </div>
   </div>
+</div>
 
-  <!-- Feature Cards -->
-  <div class="container py-6 my-5">
+<!-- Portal Cards -->
+<section class="py-6 my-5">
+  <div class="container">
     <div class="text-center mb-5">
-      <h2 class="fw-bold text-dark">Everything You Need</h2>
-      <p class="text-muted">A complete ecosystem for modern agriculture</p>
+      <div class="section-eyebrow">Who is it for?</div>
+      <h2 class="fw-bold text-dark">Built for Every Role</h2>
+      <p class="text-muted">Whether you grow it or buy it, AgroSmart has you covered.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="portal-card h-100">
+          <div class="portal-card-header" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+            <div class="portal-icon bg-success bg-opacity-15">🚜</div>
+            <h4 class="fw-bold mb-1">Farmer Portal</h4>
+            <p class="text-muted mb-0">Add crop listings, manage stock, and view incoming orders directly with customers.</p>
+          </div>
+          <div class="portal-card-body pt-3">
+            <ul class="list-unstyled mb-4">
+              <li class="mb-2 d-flex align-items-center gap-2"><span class="text-success fw-bold">✓</span> Add & manage product listings</li>
+              <li class="mb-2 d-flex align-items-center gap-2"><span class="text-success fw-bold">✓</span> AI crop disease diagnosis</li>
+              <li class="mb-2 d-flex align-items-center gap-2"><span class="text-success fw-bold">✓</span> Fertilizer recommendations</li>
+              <li class="mb-2 d-flex align-items-center gap-2"><span class="text-success fw-bold">✓</span> Sales analytics dashboard</li>
+            </ul>
+            <a href="login.html?role=farmer" class="btn btn-success w-100 fw-bold">Go to Farmer Portal →</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="portal-card h-100">
+          <div class="portal-card-header" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb);">
+            <div class="portal-icon" style="background: rgba(33,150,243,0.12);">🛒</div>
+            <h4 class="fw-bold mb-1">Buyer Marketplace</h4>
+            <p class="text-muted mb-0">Browse fresh products from local farms and place orders directly.</p>
+          </div>
+          <div class="portal-card-body pt-3">
+            <ul class="list-unstyled mb-4">
+              <li class="mb-2 d-flex align-items-center gap-2"><span class="text-success fw-bold">✓</span> District-based product recommendations</li>
+              <li class="mb-2 d-flex align-items-center gap-2"><span class="text-success fw-bold">✓</span> AI-suggested fair prices</li>
+              <li class="mb-2 d-flex align-items-center gap-2"><span class="text-success fw-bold">✓</span> Cart & secure checkout</li>
+              <li class="mb-2 d-flex align-items-center gap-2"><span class="text-success fw-bold">✓</span> Order tracking & history</li>
+            </ul>
+            <a href="login.html?role=buyer" class="btn btn-success w-100 fw-bold">Open Marketplace →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Grid -->
+<section style="background: linear-gradient(135deg, #0d2414, #1a3a22); padding: 5rem 0;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-eyebrow" style="color: var(--secondary);">Platform Features</div>
+      <h2 class="fw-bold text-white">Everything You Need</h2>
+      <p style="color: rgba(255,255,255,0.6);">A complete ecosystem for modern agriculture</p>
     </div>
     <div class="row g-4">
       <div class="col-md-6 col-lg-3">
-        <div class="card feature-card p-4 h-100 border-0 shadow-sm">
-          <div class="feature-icon bg-success bg-opacity-10">🚜</div>
-          <h5 class="fw-bold mb-2" data-i18n="nav_farmer_hub">Farmer Portal</h5>
-          <p class="text-muted small mb-4" data-i18n="f_portal_desc">Add crop listings, manage stock, and view incoming orders directly with customers.</p>
-          <a href="login.html?role=farmer" class="btn btn-success btn-sm mt-auto" data-i18n="f_portal_go_btn">Go to Portal →</a>
+        <div class="card feature-card p-4 h-100 border-0" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1) !important;">
+          <div class="feature-icon" style="background: rgba(46,204,82,0.15);">🌤️</div>
+          <h5 class="fw-bold mb-2 text-white">Live Weather</h5>
+          <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Real-time weather with AI crop alerts and 3-day forecasts for your exact location.</p>
+          <a href="weather.html" class="btn btn-outline-light btn-sm mt-auto" style="border-color: rgba(255,255,255,0.3);">View Weather →</a>
         </div>
       </div>
       <div class="col-md-6 col-lg-3">
-        <div class="card feature-card p-4 h-100 border-0 shadow-sm">
-          <div class="feature-icon bg-primary bg-opacity-10">🛒</div>
-          <h5 class="fw-bold mb-2" data-i18n="b_market_title">Buyer Marketplace</h5>
-          <p class="text-muted small mb-4" data-i18n="b_market_desc">Browse fresh products from local farms and place orders directly with just a few clicks.</p>
-          <a href="login.html?role=buyer" class="btn btn-success btn-sm mt-auto" data-i18n="b_market_open_btn">Open Marketplace →</a>
+        <div class="card feature-card p-4 h-100 border-0" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1) !important;">
+          <div class="feature-icon" style="background: rgba(59,130,246,0.15);">💧</div>
+          <h5 class="fw-bold mb-2 text-white">Reservoir Monitor</h5>
+          <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Live water levels of 5 major TN reservoirs with automatic flood alerts.</p>
+          <a href="reservoir.html" class="btn btn-outline-light btn-sm mt-auto" style="border-color: rgba(255,255,255,0.3);">Monitor Now →</a>
         </div>
       </div>
       <div class="col-md-6 col-lg-3">
-        <div class="card feature-card p-4 h-100 border-0 shadow-sm">
-          <div class="feature-icon bg-info bg-opacity-10">🌤️</div>
-          <h5 class="fw-bold mb-2">Weather & Alerts</h5>
-          <p class="text-muted small mb-4">Live weather data with AI-generated crop maintenance alerts specific to your region.</p>
-          <a href="home.html" class="btn btn-success btn-sm mt-auto">View Weather →</a>
+        <div class="card feature-card p-4 h-100 border-0" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1) !important;">
+          <div class="feature-icon" style="background: rgba(239,68,68,0.15);">🔬</div>
+          <h5 class="fw-bold mb-2 text-white">Disease Analysis</h5>
+          <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">AI-powered crop disease diagnosis with image support and treatment recommendations.</p>
+          <a href="login.html?role=farmer" class="btn btn-outline-light btn-sm mt-auto" style="border-color: rgba(255,255,255,0.3);">Try Now →</a>
         </div>
       </div>
       <div class="col-md-6 col-lg-3">
-        <div class="card feature-card p-4 h-100 border-0 shadow-sm">
-          <div class="feature-icon bg-warning bg-opacity-10">💧</div>
-          <h5 class="fw-bold mb-2" data-i18n="nav_reservoir">Reservoir Monitor</h5>
-          <p class="text-muted small mb-4">Track live water levels of major reservoirs with automatic flood alerts when thresholds are exceeded.</p>
-          <a href="reservoir.html" class="btn btn-success btn-sm mt-auto">Monitor Now →</a>
+        <div class="card feature-card p-4 h-100 border-0" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1) !important;">
+          <div class="feature-icon" style="background: rgba(245,158,11,0.15);">📰</div>
+          <h5 class="fw-bold mb-2 text-white">Farmer News</h5>
+          <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Latest government schemes, subsidies, and agriculture news curated for Tamil Nadu farmers.</p>
+          <a href="news.html" class="btn btn-outline-light btn-sm mt-auto" style="border-color: rgba(255,255,255,0.3);">Read News →</a>
         </div>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="footer" data-i18n="footer_text">© AgroSmart 2025 · Built for Tamil Nadu Farmers</div>
+<div class="footer">© AgroSmart 2025 · Built for Tamil Nadu Farmers</div>
 
-  <script src="app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Update nav based on login state
-    document.addEventListener('DOMContentLoaded', function() {
-      const user = JSON.parse(localStorage.getItem('agroUser') || 'null');
-      const loginBtn = document.getElementById('loginBtn');
-      const logoutBtn = document.getElementById('logoutBtn');
-      const navUser = document.getElementById('navUser');
-      if (user) {
-        loginBtn.classList.add('d-none');
-        logoutBtn.classList.remove('d-none');
-        navUser.textContent = '👤 ' + user.username;
-      }
-    });
-  </script>
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('agroUser') || 'null');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (user) {
+      if (loginBtn) loginBtn.classList.add('d-none');
+      if (logoutBtn) logoutBtn.classList.remove('d-none');
+    }
+  });
+</script>
 </body>
-
 </html>

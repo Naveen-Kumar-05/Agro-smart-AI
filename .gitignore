@@ -1,0 +1,4 @@
+node_modules/
+data/agrosmart.db
+data/agrosmart.db-wal
+data/agrosmart.db-shm

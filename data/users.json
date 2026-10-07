@@ -4,14 +4,14 @@
     "password": "123",
     "role": "buyer",
     "contactNumber": "9876543210",
-    "Location": "Coimbatore"
+    "location": "Coimbatore"
   },
   {
     "username": "praneth1",
     "password": "123",
     "role": "farmer",
     "contactNumber": "1122334455",
-    "Location": "Coimbatore"
+    "location": "Coimbatore"
   },
   {
     "username": "testfarmer",
